@@ -13,7 +13,8 @@ ShoppingItem _$ShoppingItemFromJson(Map<String, dynamic> json) => ShoppingItem(
       description: json['description'] as String?,
       quantity: json['quantity'] as int,
       unit: $enumDecode(_$UnitEnumMap, json['unit']),
-      isBought: json['isBought'] as bool? ?? false,
+      state: $enumDecodeNullable(_$ShoppingItemStateEnumMap, json['state']) ??
+          ShoppingItemState.NotBought,
     );
 
 Map<String, dynamic> _$ShoppingItemToJson(ShoppingItem instance) =>
@@ -24,7 +25,7 @@ Map<String, dynamic> _$ShoppingItemToJson(ShoppingItem instance) =>
       'description': instance.description,
       'quantity': instance.quantity,
       'unit': _$UnitEnumMap[instance.unit]!,
-      'isBought': instance.isBought,
+      'state': _$ShoppingItemStateEnumMap[instance.state]!,
     };
 
 const _$UnitEnumMap = {
@@ -42,4 +43,10 @@ const _$UnitEnumMap = {
   Unit.Package: 'Package',
   Unit.Band: 'Band',
   Unit.Piece: 'Piece',
+};
+
+const _$ShoppingItemStateEnumMap = {
+  ShoppingItemState.Bought: 'Bought',
+  ShoppingItemState.NotBought: 'NotBought',
+  ShoppingItemState.NotAvailable: 'NotAvailable',
 };

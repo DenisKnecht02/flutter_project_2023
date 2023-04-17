@@ -16,7 +16,7 @@ class ShoppingListPage extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: snapshot.data?.items
-                        .map((e) => ShoppingItemWidget(e))
+                        .map((item) => ShoppingItemWidget(shoppingItem: item))
                         .toList() ??
                     [],
               ),
