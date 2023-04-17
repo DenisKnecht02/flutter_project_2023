@@ -12,6 +12,8 @@ class ShoppingItemWidget extends StatefulWidget {
 }
 
 class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
+  final _meatballMenuIcon = const Icon(Icons.more_vert);
+
   @override
   Widget build(BuildContext context) {
     Color boxColor;
@@ -32,12 +34,34 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
-        color: boxColor, // Apply the color to the Card widget
+        color: boxColor,
         child: ListTile(
           title: Text(widget.shoppingItem.name),
           subtitle: Text(
               "${widget.shoppingItem.description ?? ''} (by: ${widget.shoppingItem.creatorId})"),
           leading: Icon(getStateIconData(widget.shoppingItem.state)),
+          trailing: PopupMenuButton(
+            onSelected: (value) {
+              switch (value) {
+                case 'delete':
+                  // handle delete action
+                  break;
+                case 'Update':
+                  // handle Update action
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+              const PopupMenuItem(
+                value: 'delete',
+                child: Text('Delete'),
+              ),
+              const PopupMenuItem(
+                value: 'Update',
+                child: Text('Update'),
+              ),
+            ],
+          ),
           onTap: () {
             setState(() {
               widget.shoppingItem.state = ShoppingItemState.values[
