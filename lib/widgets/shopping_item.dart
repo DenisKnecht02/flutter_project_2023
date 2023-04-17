@@ -11,6 +11,7 @@ class ShoppingItemWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
+        color: shoppingItem.isBought ? Colors.green : null,
         child: ListTile(
           title: Text(shoppingItem.name),
           subtitle: Text(
