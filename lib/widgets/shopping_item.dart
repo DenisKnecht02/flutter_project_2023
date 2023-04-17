@@ -19,77 +19,105 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
     Color boxColor;
     switch (widget.shoppingItem.state) {
       case ShoppingItemState.Bought:
-        boxColor = Colors.green;
+        boxColor = Colors.green[100]!;
         break;
       case ShoppingItemState.NotBought:
         boxColor = Colors.white;
         break;
       case ShoppingItemState.NotAvailable:
-        boxColor = Colors.grey;
+        boxColor = Colors.grey[300]!;
         break;
       default:
         boxColor = Colors.white;
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
         color: boxColor,
-        child: ListTile(
-          title: Text(widget.shoppingItem.name),
-          subtitle: Text(
-              "${widget.shoppingItem.description ?? ''} (by: ${widget.shoppingItem.creatorId})"),
-          leading: Icon(getStateIconData(widget.shoppingItem.state)),
-          trailing: PopupMenuButton(
-            onSelected: (value) {
-              switch (value) {
-                case 'delete':
-                  // handle delete action
-                  break;
-                case 'Update':
-                  // handle Update action
-                  break;
-              }
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-              const PopupMenuItem(
-                value: 'delete',
-                child: Text('Delete'),
-              ),
-              const PopupMenuItem(
-                value: 'Update',
-                child: Text('Update'),
-              ),
-            ],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey[400]!,
+            blurRadius: 4.0,
+            offset: Offset(2.0, 2.0),
           ),
-          onTap: () {
-            setState(() {
-              widget.shoppingItem.state = ShoppingItemState.values[
-                  (widget.shoppingItem.state.index + 1) %
-                      ShoppingItemState.values.length];
-            });
-          },
+        ],
+      ),
+      child: ListTile(
+        title: Text(
+          widget.shoppingItem.name,
+          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
+        subtitle: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            "${widget.shoppingItem.description ?? ''} (by: ${widget.shoppingItem.creatorId})",
+            style: TextStyle(fontSize: 14.0),
+          ),
+        ),
+        leading: Icon(
+          getStateIconData(widget.shoppingItem.state),
+          color: _getIconColor(widget.shoppingItem.state),
+          size: 28.0,
+        ),
+        trailing: PopupMenuButton(
+          onSelected: (value) {
+            switch (value) {
+              case 'delete':
+                // handle delete action
+                break;
+              case 'Update':
+                // handle Update action
+                break;
+            }
+          },
+          itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+            const PopupMenuItem(
+              value: 'delete',
+              child: Text('Delete'),
+            ),
+            const PopupMenuItem(
+              value: 'Update',
+              child: Text('Update'),
+            ),
+          ],
+          icon: _meatballMenuIcon,
+        ),
+        onTap: () {
+          setState(() {
+            widget.shoppingItem.state = ShoppingItemState.values[
+                (widget.shoppingItem.state.index + 1) %
+                    ShoppingItemState.values.length];
+          });
+        },
       ),
     );
+  }
+
+  Color _getIconColor(ShoppingItemState state) {
+    switch (state) {
+      case ShoppingItemState.Bought:
+        return Colors.green;
+      case ShoppingItemState.NotBought:
+        return Colors.blue;
+      case ShoppingItemState.NotAvailable:
+        return Colors.grey;
+      default:
+        return Colors.black;
+    }
   }
 }
 
 IconData getStateIconData(ShoppingItemState state) {
-  IconData iconData;
   switch (state) {
     case ShoppingItemState.Bought:
-      iconData = Icons.check;
-      break;
+      return Icons.check_circle;
     case ShoppingItemState.NotBought:
-      iconData = Icons.shopping_cart;
-      break;
+      return Icons.shopping_cart;
     case ShoppingItemState.NotAvailable:
-      iconData = Icons.remove_shopping_cart;
-      break;
+      return Icons.remove_shopping_cart;
     default:
-      iconData = Icons.question_mark;
+      return Icons.help_outline;
   }
-
-  return iconData;
 }
