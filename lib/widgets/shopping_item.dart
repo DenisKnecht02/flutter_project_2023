@@ -17,7 +17,6 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
-        color: shoppingItem.isBought ? Colors.green : null,
         child: ListTile(
           title: Text(widget.shoppingItem.name),
           subtitle: Text(
