@@ -3,20 +3,36 @@ import 'package:flutter_project_2023/shared/enums.dart';
 import 'package:flutter_project_2023/repositories/shopping_item_model.dart';
 
 class ShoppingItemWidget extends StatefulWidget {
-  ShoppingItem shoppingItem;
+  final ShoppingItem shoppingItem;
 
-  ShoppingItemWidget({super.key, required this.shoppingItem});
+  ShoppingItemWidget({Key? key, required this.shoppingItem}) : super(key: key);
 
   @override
-  State<ShoppingItemWidget> createState() => _ShoppingItemWidgetState();
+  _ShoppingItemWidgetState createState() => _ShoppingItemWidgetState();
 }
 
 class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
   @override
   Widget build(BuildContext context) {
+    Color boxColor;
+    switch (widget.shoppingItem.state) {
+      case ShoppingItemState.Bought:
+        boxColor = Colors.green;
+        break;
+      case ShoppingItemState.NotBought:
+        boxColor = Colors.white;
+        break;
+      case ShoppingItemState.NotAvailable:
+        boxColor = Colors.grey;
+        break;
+      default:
+        boxColor = Colors.white;
+    }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
+        color: boxColor, // Apply the color to the Card widget
         child: ListTile(
           title: Text(widget.shoppingItem.name),
           subtitle: Text(
