@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project_2023/widgets/pages/settings_page.dart';
 
 import 'package:flutter_project_2023/widgets/pages/shopping_list_page.dart';
 
@@ -46,10 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
       size: 150,
     ),
     ShoppingListPage(),
-    Icon(
-      Icons.chat,
-      size: 150,
-    ),
+    SettingsPage(),
   ];
 
   @override

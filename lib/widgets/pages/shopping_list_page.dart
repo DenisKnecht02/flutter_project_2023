@@ -9,7 +9,11 @@ class ShoppingListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Shopping List'),
+      ),
+      body: FutureBuilder(
         future: shoppingListRepository.getShoppingList(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -26,6 +30,8 @@ class ShoppingListPage extends StatelessWidget {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        });
+        },
+      ),
+    );
   }
 }
