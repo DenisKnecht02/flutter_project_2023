@@ -32,7 +32,7 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
     }
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         color: boxColor,
@@ -67,8 +67,8 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
               case 'delete':
                 // handle delete action
                 break;
-              case 'Update':
-                // handle Update action
+              case 'Edit':
+                // handle Edit action
                 break;
             }
           },
@@ -78,8 +78,8 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
               child: Text('Delete'),
             ),
             const PopupMenuItem(
-              value: 'Update',
-              child: Text('Update'),
+              value: 'Edit',
+              child: Text('Edit'),
             ),
           ],
           icon: _meatballMenuIcon,
