@@ -1,10 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project_2023/widgets/pages/group_page.dart';
+import 'package:flutter_project_2023/firebase_options.dart';
 import 'package:flutter_project_2023/widgets/pages/settings_page.dart';
 
 import 'package:flutter_project_2023/widgets/pages/shopping_list_page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
