@@ -11,18 +11,16 @@ class ShoppingListPage extends StatefulWidget {
 }
 
 class _ShoppingListPageState extends State<ShoppingListPage> {
-  String? _selectedGroup = 'Select Group';
+  String? _selectedGroup;
   ShoppingItemRepository shoppingListRepository = new ShoppingItemRepository();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.white,
+          centerTitle: false,
           title: DropdownButton<String>(
             value: _selectedGroup,
             onChanged: (String? newValue) {
@@ -30,25 +28,45 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                 _selectedGroup = newValue;
               });
             },
-            items: <String>['Select Group', 'Group1', 'Group2', 'Group3']
+            items: <String>['Group1', 'Group2', 'Group3']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(
                   value,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
               );
             }).toList(),
-            icon: Icon(
-              Icons.arrow_drop_down,
-              color: Colors.white,
+            style: const TextStyle(color: Colors.black),
+            hint: const Text(
+              'Select a Group',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.normal,
+              ),
             ),
-            underline: Container(),
+            underline: Container(
+              height: 2,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+            ),
+            icon: const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: Colors.black,
+            ),
+            iconSize: 24,
+            iconEnabledColor: Colors.black,
+            dropdownColor: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            elevation: 8,
           ),
+          backgroundColor: Colors.white,
         ),
       ),
       body: FutureBuilder(
@@ -56,7 +74,6 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: snapshot.data?.items
                         .map((item) => ShoppingItemWidget(shoppingItem: item))
@@ -66,13 +83,12 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
             );
           }
 
-          return Center(
-            child: CircularProgressIndicator(
-              color: Colors.blue,
-            ),
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         },
       ),
+      backgroundColor: Colors.white,
     );
   }
 }
