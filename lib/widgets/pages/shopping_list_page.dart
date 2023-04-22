@@ -67,6 +67,26 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
             elevation: 8,
           ),
           backgroundColor: Colors.white,
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 10.0),
+              child: IconButton(
+                icon: Icon(Icons.delete_outlined),
+                onPressed: () {
+                  // TODO: Implement delete functionality here
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 10.0),
+              child: IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  // TODO: Implement add item functionality here
+                },
+              ),
+            ),
+          ],
         ),
       ),
       body: FutureBuilder(
