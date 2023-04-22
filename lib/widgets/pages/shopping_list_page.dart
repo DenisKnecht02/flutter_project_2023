@@ -73,7 +73,87 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
               child: IconButton(
                 icon: Icon(Icons.delete_outlined),
                 onPressed: () {
-                  // TODO: Implement delete functionality here
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      bool _allSelected = false;
+                      bool _boughtSelected = false;
+                      bool _notAvailableSelected = false;
+
+                      return StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
+                          return AlertDialog(
+                            title: Text("Select Items to Delete"),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CheckboxListTile(
+                                  title: Text("Bought"),
+                                  value: _boughtSelected,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      _boughtSelected = value ?? false;
+                                      if (_boughtSelected &&
+                                          _notAvailableSelected) {
+                                        _allSelected = false;
+                                      } else {
+                                        _allSelected = _boughtSelected &&
+                                            _notAvailableSelected;
+                                      }
+                                    });
+                                  },
+                                ),
+                                CheckboxListTile(
+                                  title: Text("Not Available"),
+                                  value: _notAvailableSelected,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      _notAvailableSelected = value ?? false;
+                                      if (_boughtSelected &&
+                                          _notAvailableSelected) {
+                                        _allSelected = false;
+                                      } else {
+                                        _allSelected = _boughtSelected &&
+                                            _notAvailableSelected;
+                                      }
+                                    });
+                                  },
+                                ),
+                                CheckboxListTile(
+                                  title: Text("All"),
+                                  value: _allSelected,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      _allSelected = value ?? false;
+                                      _boughtSelected = value ?? false;
+                                      _notAvailableSelected = value ?? false;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text("Cancel"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  // Do something with the selected items
+                                  print(
+                                      "All: $_allSelected, Bought: $_boughtSelected, Not Available: $_notAvailableSelected");
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  );
                 },
               ),
             ),
