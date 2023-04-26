@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_project_2023/widgets/pages/group_page.dart';
 import 'package:flutter_project_2023/firebase_options.dart';
+import 'package:flutter_project_2023/widgets/pages/settings_page.dart';
 
 import 'package:flutter_project_2023/widgets/pages/shopping_list_page.dart';
 
@@ -49,15 +51,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   static List<Widget> _pages = <Widget>[
-    Icon(
-      Icons.call,
-      size: 150,
-    ),
+    GrouPage(),
     ShoppingListPage(),
-    Icon(
-      Icons.chat,
-      size: 150,
-    ),
+    SettingsPage(),
   ];
 
   @override
