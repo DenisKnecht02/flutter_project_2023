@@ -186,22 +186,93 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            TextField(
-                              decoration: const InputDecoration(
-                                labelText: 'Quantity',
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      labelText: 'Quantity',
+                                      border: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.grey),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.blue),
+                                      ),
+                                      labelStyle: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                  ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: DropdownButton<String>(
+                                      value: _selectedGroup,
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          _selectedGroup = newValue;
+                                        });
+                                      },
+                                      items: <String>[
+                                        'Group1',
+                                        'Group2',
+                                        'Group3'
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(
+                                            value,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      style:
+                                          const TextStyle(color: Colors.black),
+                                      hint: const Text(
+                                        'Select a Group',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                      underline: Container(
+                                        height: 2,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      icon: const Icon(
+                                        Icons.keyboard_arrow_down_rounded,
+                                        color: Colors.black,
+                                      ),
+                                      iconSize: 24,
+                                      iconEnabledColor: Colors.black,
+                                      dropdownColor: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      elevation: 8,
+                                    ),
+                                  ),
                                 ),
-                                labelStyle: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              keyboardType: TextInputType.number,
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.digitsOnly,
                               ],
                             ),
                           ],
