@@ -166,8 +166,33 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text("Add An Item"),
-                        actions: [
+                        title: const Text("Add an Item"),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const <Widget>[
+                            TextField(
+                              decoration: InputDecoration(
+                                labelText: 'Enter product name',
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Cancel'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
                           TextButton(
                             child: Text("OK"),
                             onPressed: () {
@@ -175,6 +200,11 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                             },
                           ),
                         ],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        backgroundColor: Colors.white,
+                        elevation: 4.0,
                       );
                     },
                   );
