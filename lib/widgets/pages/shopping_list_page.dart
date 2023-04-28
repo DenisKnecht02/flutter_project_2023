@@ -18,7 +18,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
+        preferredSize: const Size.fromHeight(kToolbarHeight),
         child: AppBar(
           centerTitle: false,
           title: DropdownButton<String>(
@@ -69,9 +69,9 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
           backgroundColor: Colors.white,
           actions: [
             Padding(
-              padding: EdgeInsets.only(right: 10.0),
+              padding: const EdgeInsets.only(right: 10.0),
               child: IconButton(
-                icon: Icon(Icons.delete_outlined),
+                icon: const Icon(Icons.delete_outlined),
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -83,12 +83,12 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                       return StatefulBuilder(
                         builder: (BuildContext context, StateSetter setState) {
                           return AlertDialog(
-                            title: Text("Select Items to Delete"),
+                            title: const Text("Select Items to Delete"),
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 CheckboxListTile(
-                                  title: Text("Bought"),
+                                  title: const Text("Bought"),
                                   value: _boughtSelected,
                                   onChanged: (bool? value) {
                                     setState(() {
@@ -104,7 +104,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                                   },
                                 ),
                                 CheckboxListTile(
-                                  title: Text("Not Available"),
+                                  title: const Text("Not Available"),
                                   value: _notAvailableSelected,
                                   onChanged: (bool? value) {
                                     setState(() {
@@ -120,7 +120,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                                   },
                                 ),
                                 CheckboxListTile(
-                                  title: Text("All"),
+                                  title: const Text("All"),
                                   value: _allSelected,
                                   onChanged: (bool? value) {
                                     setState(() {
@@ -134,13 +134,13 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                             ),
                             actions: [
                               TextButton(
-                                child: Text("Cancel"),
+                                child: const Text("Cancel"),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
                               ),
                               TextButton(
-                                child: Text("OK"),
+                                child: const Text("OK"),
                                 onPressed: () {
                                   // Do something with the selected items
                                   print(
@@ -158,9 +158,9 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(right: 10.0),
+              padding: const EdgeInsets.only(right: 10.0),
               child: IconButton(
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 onPressed: () {
                   showDialog(
                     context: context,

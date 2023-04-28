@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
       title: 'GroupCart',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        cardColor: Colors.deepPurple.shade50,
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'GroupCart'),
