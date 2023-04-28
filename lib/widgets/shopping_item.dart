@@ -40,20 +40,20 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
           BoxShadow(
             color: Colors.grey[400]!,
             blurRadius: 4.0,
-            offset: Offset(2.0, 2.0),
+            offset: const Offset(2.0, 2.0),
           ),
         ],
       ),
       child: ListTile(
         title: Text(
           widget.shoppingItem.name,
-          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             "${widget.shoppingItem.description ?? ''} (by: ${widget.shoppingItem.creatorId})",
-            style: TextStyle(fontSize: 14.0),
+            style: const TextStyle(fontSize: 14.0),
           ),
         ),
         leading: Icon(

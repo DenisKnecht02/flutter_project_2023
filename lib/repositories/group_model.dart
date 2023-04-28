@@ -11,7 +11,9 @@ class Group {
 
   final String? description;
 
-  Group(this.id, this.creatorId, this.name, this.description);
+  final List<String> userIds;
+
+  Group(this.id, this.creatorId, this.name, this.description, this.userIds);
 
   factory Group.fromJson(Map<String, dynamic> json) => _$GroupFromJson(json);
 
