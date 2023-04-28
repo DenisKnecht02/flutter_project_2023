@@ -65,7 +65,27 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
           onSelected: (value) {
             switch (value) {
               case 'delete':
-                // handle delete action
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Delete Item'),
+                    content: const Text(
+                        'Are you sure you want to delete this item?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // delete the item from the list
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Delete'),
+                      ),
+                    ],
+                  ),
+                );
                 break;
               case 'Edit':
                 // handle Edit action
