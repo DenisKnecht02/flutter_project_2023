@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_project_2023/repositories/shopping_item_repository.dart';
 import 'package:flutter_project_2023/widgets/shopping_item.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/services.dart';
 
 class ShoppingListPage extends StatefulWidget {
   ShoppingListPage({Key? key}) : super(key: key);
@@ -169,8 +170,8 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                         title: const Text("Add an Item"),
                         content: Column(
                           mainAxisSize: MainAxisSize.min,
-                          children: const <Widget>[
-                            TextField(
+                          children: <Widget>[
+                            const TextField(
                               decoration: InputDecoration(
                                 labelText: 'Enter product name',
                                 border: OutlineInputBorder(
@@ -184,17 +185,36 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                                 ),
                               ),
                             ),
+                            const SizedBox(height: 20),
+                            TextField(
+                              decoration: const InputDecoration(
+                                labelText: 'Quantity',
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue),
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                            ),
                           ],
                         ),
                         actions: <Widget>[
                           TextButton(
-                            child: Text('Cancel'),
+                            child: const Text('Cancel'),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
                           ),
                           TextButton(
-                            child: Text("OK"),
+                            child: const Text("OK"),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
