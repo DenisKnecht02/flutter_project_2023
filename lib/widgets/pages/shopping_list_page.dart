@@ -162,7 +162,22 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
               child: IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () {
-                  // TODO: Implement add item functionality here
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Add An Item"),
+                        actions: [
+                          TextButton(
+                            child: Text("OK"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
               ),
             ),
