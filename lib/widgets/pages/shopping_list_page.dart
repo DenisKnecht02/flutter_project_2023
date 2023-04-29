@@ -3,6 +3,7 @@ import 'package:flutter_project_2023/repositories/shopping_item_repository.dart'
 import 'package:flutter_project_2023/widgets/shopping_item.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_project_2023/shared/enums.dart';
 
 class ShoppingListPage extends StatefulWidget {
   ShoppingListPage({Key? key}) : super(key: key);
@@ -13,6 +14,7 @@ class ShoppingListPage extends StatefulWidget {
 
 class _ShoppingListPageState extends State<ShoppingListPage> {
   String? _selectedGroup;
+  String? _selectedUnit;
   ShoppingItemRepository shoppingListRepository = new ShoppingItemRepository();
 
   @override
@@ -221,23 +223,17 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                                         width: 1,
                                       ),
                                     ),
-                                    child: DropdownButton<String>(
-                                      value: _selectedGroup,
-                                      onChanged: (String? newValue) {
+                                    child: DropdownButton<Unit>(
+                                      onChanged: (Unit? newValue) {
                                         setState(() {
-                                          _selectedGroup = newValue;
+                                          _selectedUnit = newValue as String?;
                                         });
                                       },
-                                      items: <String>[
-                                        'Group1',
-                                        'Group2',
-                                        'Group3'
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
+                                      items: Unit.values.map((Unit unit) {
+                                        return DropdownMenuItem<Unit>(
+                                          value: unit,
                                           child: Text(
-                                            value,
+                                            unit.toString(),
                                             style: const TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.normal,
@@ -248,7 +244,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                                       style:
                                           const TextStyle(color: Colors.black),
                                       hint: const Text(
-                                        'Select a Group',
+                                        'Select a Unit',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.normal,
