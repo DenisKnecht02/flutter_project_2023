@@ -3,6 +3,7 @@ import 'package:flutter_project_2023/repositories/shopping_item_repository.dart'
 import 'package:flutter_project_2023/widgets/shopping_item.dart';
 import 'package:flutter_project_2023/widgets/shopping_list_add_item.dart';
 
+import '../../shared/enums.dart';
 import '../shopping_list_delete_item.dart';
 
 class ShoppingListPage extends StatefulWidget {
@@ -106,12 +107,29 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
         future: shoppingListRepository.getShoppingList(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            // sort the items by state: Bought -> NotBought -> NotAvailable
+            final sortedItems = snapshot.data!.items.toList()
+              ..sort((a, b) {
+                if (a.state == b.state) {
+                  return 0;
+                } else if (a.state == ShoppingItemState.Bought) {
+                  return -1;
+                } else if (b.state == ShoppingItemState.Bought) {
+                  return 1;
+                } else if (a.state == ShoppingItemState.NotBought) {
+                  return -1;
+                } else if (b.state == ShoppingItemState.NotBought) {
+                  return 1;
+                } else {
+                  return -1;
+                }
+              });
+
             return SingleChildScrollView(
               child: Column(
-                children: snapshot.data?.items
-                        .map((item) => ShoppingItemWidget(shoppingItem: item))
-                        .toList() ??
-                    [],
+                children: sortedItems
+                    .map((item) => ShoppingItemWidget(shoppingItem: item))
+                    .toList(),
               ),
             );
           }
