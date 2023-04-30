@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_2023/repositories/shopping_item_repository.dart';
 import 'package:flutter_project_2023/widgets/shopping_item.dart';
-import 'package:flutter_project_2023/widgets/pages/shopping_list_add_item.dart';
+import 'package:flutter_project_2023/widgets/shopping_list_add_item.dart';
 
 class ShoppingListPage extends StatefulWidget {
   const ShoppingListPage({Key? key}) : super(key: key);
