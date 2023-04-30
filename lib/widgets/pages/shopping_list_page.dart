@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_2023/repositories/shopping_item_repository.dart';
 import 'package:flutter_project_2023/widgets/shopping_item.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_project_2023/shared/enums.dart';
+import 'package:flutter_project_2023/widgets/pages/shopping_list_add_item.dart';
 
 class ShoppingListPage extends StatefulWidget {
-  ShoppingListPage({Key? key}) : super(key: key);
+  const ShoppingListPage({Key? key}) : super(key: key);
 
   @override
   _ShoppingListPageState createState() => _ShoppingListPageState();
@@ -14,8 +12,7 @@ class ShoppingListPage extends StatefulWidget {
 
 class _ShoppingListPageState extends State<ShoppingListPage> {
   String? _selectedGroup;
-  String? _selectedUnit;
-  ShoppingItemRepository shoppingListRepository = new ShoppingItemRepository();
+  ShoppingItemRepository shoppingListRepository = ShoppingItemRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -167,133 +164,8 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("Add an Item"),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            const TextField(
-                              decoration: InputDecoration(
-                                labelText: 'Enter product name',
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue),
-                                ),
-                                labelStyle: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    decoration: const InputDecoration(
-                                      labelText: 'Quantity',
-                                      border: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.grey),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.blue),
-                                      ),
-                                      labelStyle: TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.digitsOnly,
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4),
-                                      border: Border.all(
-                                        color: Colors.grey,
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child: DropdownButton<Unit>(
-                                      onChanged: (Unit? newValue) {
-                                        setState(() {
-                                          _selectedUnit = newValue as String?;
-                                        });
-                                      },
-                                      items: Unit.values.map((Unit unit) {
-                                        return DropdownMenuItem<Unit>(
-                                          value: unit,
-                                          child: Text(
-                                            unit.toString(),
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      style:
-                                          const TextStyle(color: Colors.black),
-                                      hint: const Text(
-                                        'Select a Unit',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      ),
-                                      underline: Container(
-                                        height: 2,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                      ),
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down_rounded,
-                                        color: Colors.black,
-                                      ),
-                                      iconSize: 24,
-                                      iconEnabledColor: Colors.black,
-                                      dropdownColor: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      elevation: 8,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('Cancel'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          TextButton(
-                            child: const Text("OK"),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        backgroundColor: Colors.white,
-                        elevation: 4.0,
-                      );
-                    },
+                    // builder: (BuildContext context) {},
+                    builder: (_) => const ShoppingListAddItem(),
                   );
                 },
               ),
