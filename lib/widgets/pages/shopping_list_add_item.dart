@@ -78,7 +78,7 @@ class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
                       return DropdownMenuItem<Unit>(
                         value: unit,
                         child: Text(
-                          unit.toString(),
+                          unit.toString().split('.').last,
                           style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.normal,
