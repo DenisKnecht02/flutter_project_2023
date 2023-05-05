@@ -1,37 +1,42 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_project_2023/repositories/group_model.dart';
 import 'package:flutter_project_2023/repositories/groups_model.dart';
+import 'package:flutter_project_2023/shared/constants.dart';
 
 class GroupRepository {
-  final firestore = FirebaseFirestore.instance;
-  List<Group> groupsList = [];
+  final currentUser = FirebaseAuth.instance.currentUser;
+  final db = FirebaseFirestore.instance;
 
   Future<Groups> getGroups() async {
-
-    var groups2 = firestore.collection("/groups");
-
-    await groups2.get()
-    .then((querySnapshot) {
-      debugPrint("##############");
-        for (var docSnapshot in querySnapshot.docs) {
-          
-          final data = docSnapshot.data();
-
-          for (var test in data.values) {
-            groupsList.add(test);
+    var groups = List<Group>;
+    await db
+        .collection(collectionId)
+        .where("userIds", arrayContainsAny: ["Eqo0JFfEDwdiUPDw78y1UYS5LGb2"])
+        .get()
+        .then((querySnapshot) {
+          for (var docSnapshot in querySnapshot.docs) {
+            print('${docSnapshot.id} => ${docSnapshot.data()}');
+            print(Group.fromFirestore(docSnapshot));
+            groups.add
           }
-        }
-      },
-      onError: (e) => debugPrint("Error completing: $e")
-    );
+        }, onError: (e) => throw Exception("Error"));
+  }
 
-    return Groups([
-      Group(1, "group#1", "Familie HWR", null),
-      Group(2, "group#2", "Familie Flutter", "Flutter Gruppe")
-    ]);
-
+  void request() async {
+    debugPrint("called!");
+    await db
+        .collection(collectionId)
+        .where("userIds", arrayContainsAny: ["Eqo0JFfEDwdiUPDw78y1UYS5LGb2"])
+        .get()
+        .then((querySnapshot) {
+          for (var docSnapshot in querySnapshot.docs) {
+            print('${docSnapshot.id} => ${docSnapshot.data()}');
+            print(Group.fromFirestore(docSnapshot));
+          }
+        }, onError: (e) => throw Exception("Error"));
   }
 }
