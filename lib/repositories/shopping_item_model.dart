@@ -1,9 +1,5 @@
 import 'package:flutter_project_2023/shared/enums.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'shopping_item_model.g.dart';
-
-@JsonSerializable()
 class ShoppingItem {
   final int id;
   final String creatorId;
@@ -16,8 +12,7 @@ class ShoppingItem {
 
   final Unit unit;
 
-  @JsonKey(defaultValue: ShoppingItemState.NotBought)
-  ShoppingItemState state;
+  ShoppingItemState state = ShoppingItemState.NotBought;
 
   ShoppingItem(
       {required this.id,
@@ -27,9 +22,4 @@ class ShoppingItem {
       required this.quantity,
       required this.unit,
       required this.state});
-
-  factory ShoppingItem.fromJson(Map<String, dynamic> json) =>
-      _$ShoppingItemFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ShoppingItemToJson(this);
 }

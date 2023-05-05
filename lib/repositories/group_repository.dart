@@ -11,16 +11,24 @@ class GroupRepository {
   final currentUser = FirebaseAuth.instance.currentUser;
   final db = FirebaseFirestore.instance;
 
+  createGroup(String name, String description) async {
+    var group = Group("", currentUser!.uid, name, description, [currentUser!.uid]);
+    db.collection("groups").add(group.toFirestore());
+  }
+
+  deleteGroup(String groupId) async {
+    db.collection("groups").doc(groupId).delete();
+  }
+
   Future<Groups> getGroups() async {
+
     List<Group> groups = [];
     await db
         .collection(collectionId)
-        .where("userIds", arrayContainsAny: ["Eqo0JFfEDwdiUPDw78y1UYS5LGb2"])
+        .where("userIds", arrayContainsAny: [currentUser?.uid])
         .get()
         .then((querySnapshot) {
           for (var docSnapshot in querySnapshot.docs) {
-            print('${docSnapshot.id} => ${docSnapshot.data()}');
-            print(Group.fromFirestore(docSnapshot));
             groups.add(Group.fromFirestore(docSnapshot));
           }
         }, onError: (e) => throw Exception("Error"));
@@ -28,17 +36,5 @@ class GroupRepository {
     return Groups(groups);
   }
 
-  void request() async {
-    debugPrint("called!");
-    await db
-        .collection(collectionId)
-        .where("userIds", arrayContainsAny: ["Eqo0JFfEDwdiUPDw78y1UYS5LGb2"])
-        .get()
-        .then((querySnapshot) {
-          for (var docSnapshot in querySnapshot.docs) {
-            print('${docSnapshot.id} => ${docSnapshot.data()}');
-            print(Group.fromFirestore(docSnapshot));
-          }
-        }, onError: (e) => throw Exception("Error"));
-  }
+
 }

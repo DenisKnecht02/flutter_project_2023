@@ -6,7 +6,6 @@ import 'package:flutter_project_2023/widgets/shopping_item.dart';
 
 class GrouPage extends StatelessWidget {
   GroupRepository groupRepository = new GroupRepository();
-
   GrouPage({super.key});
 
   @override

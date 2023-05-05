@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_project_2023/repositories/group_model.dart';
 import 'package:flutter_project_2023/widgets/pages/group_page.dart';
 import 'package:flutter_project_2023/firebase_options.dart';
 import 'package:flutter_project_2023/widgets/pages/settings_page.dart';
@@ -18,6 +19,7 @@ void main() async {
   );
 
   var user = FirebaseAuth.instance.currentUser;
+
   debugPrint(user != null ? user.uid.toString() : 'user is null');
   runApp(const MyApp());
 }
