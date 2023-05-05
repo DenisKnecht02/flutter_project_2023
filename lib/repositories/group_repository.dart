@@ -12,7 +12,7 @@ class GroupRepository {
   final db = FirebaseFirestore.instance;
 
   Future<Groups> getGroups() async {
-    var groups = List<Group>;
+    List<Group> groups = [];
     await db
         .collection(collectionId)
         .where("userIds", arrayContainsAny: ["Eqo0JFfEDwdiUPDw78y1UYS5LGb2"])
@@ -21,9 +21,11 @@ class GroupRepository {
           for (var docSnapshot in querySnapshot.docs) {
             print('${docSnapshot.id} => ${docSnapshot.data()}');
             print(Group.fromFirestore(docSnapshot));
-            groups.add
+            groups.add(Group.fromFirestore(docSnapshot));
           }
         }, onError: (e) => throw Exception("Error"));
+      
+    return Groups(groups);
   }
 
   void request() async {
