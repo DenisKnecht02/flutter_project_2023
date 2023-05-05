@@ -1,0 +1,1 @@
+const collectionId = "groups";

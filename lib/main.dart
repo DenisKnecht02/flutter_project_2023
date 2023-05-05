@@ -16,6 +16,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  var user = FirebaseAuth.instance.currentUser;
+  debugPrint(user != null ? user.uid.toString() : 'user is null');
   runApp(const MyApp());
 }
 
