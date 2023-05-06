@@ -140,6 +140,13 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
         },
       ),
       backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          setState(() {});
+        },
+        icon: const Icon(Icons.refresh),
+        label: const Text('Refresh'),
+      ),
     );
   }
 }
