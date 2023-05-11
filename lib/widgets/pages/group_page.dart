@@ -38,7 +38,7 @@ class GrouPage extends StatelessWidget {
           onPressed: () {
             Scaffold.of(context).showBottomSheet<void>((BuildContext context) {
               return Container(
-                height: 200,
+                height: MediaQuery.of(context).size.height,
                 margin:
                     const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
                 child: Center(
