@@ -3,6 +3,8 @@ import 'package:flutter_project_2023/repositories/shopping_item_repository.dart'
 import 'package:flutter_project_2023/widgets/shopping_item.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
+import '../../repositories/shopping_list_model.dart';
+
 class ShoppingListPage extends StatefulWidget {
   ShoppingListPage({Key? key}) : super(key: key);
 
@@ -170,7 +172,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
         ),
       ),
       body: FutureBuilder(
-        future: shoppingListRepository.getShoppingList(),
+        future: shoppingListRepository.getShoppingList("iDKiBckvDAkp4P5mF52q") , //ToDo: implement GroupId
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return SingleChildScrollView(

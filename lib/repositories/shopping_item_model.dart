@@ -1,25 +1,37 @@
 import 'package:flutter_project_2023/shared/enums.dart';
 
 class ShoppingItem {
-  final int id;
+  final String uuid;
   final String creatorId;
 
   final String name;
 
   final String? description;
 
-  final int quantity;
+  final int? quantity;
 
   final Unit unit;
 
   ShoppingItemState state = ShoppingItemState.NotBought;
 
   ShoppingItem(
-      {required this.id,
+      {required this.uuid,
       required this.creatorId,
       required this.name,
       this.description,
       required this.quantity,
       required this.unit,
       required this.state});
+
+    Map<String, dynamic> toFirestore() {
+    return {
+      "uuid": uuid, 
+      "creatorId": creatorId,
+      "name": name, 
+      "description": description,
+      "quantity": quantity,
+      "unit": unit.toString(),
+      "state": state.toString()
+    };
+  }
 }

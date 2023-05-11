@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   static List<Widget> _pages = <Widget>[
-    GrouPage(),
+    GroupPage(),
     ShoppingListPage(),
     ProfileScreen(
       providers: [EmailAuthProvider()],

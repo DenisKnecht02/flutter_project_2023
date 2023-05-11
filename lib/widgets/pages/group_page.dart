@@ -4,9 +4,9 @@ import 'package:flutter_project_2023/repositories/shopping_item_repository.dart'
 import 'package:flutter_project_2023/widgets/group.dart';
 import 'package:flutter_project_2023/widgets/shopping_item.dart';
 
-class GrouPage extends StatelessWidget {
+class GroupPage extends StatelessWidget {
   GroupRepository groupRepository = new GroupRepository();
-  GrouPage({super.key});
+  GroupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
