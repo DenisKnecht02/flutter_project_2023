@@ -12,6 +12,48 @@ class ShoppingItemRepository {
   final uuid = Uuid();
   final currentUser = FirebaseAuth.instance.currentUser;
   final db = FirebaseFirestore.instance;
+  Future<ShoppingList> getShoppingList(String groupId) async {
+    return await db.collection(collectionId).doc(groupId).get().then(
+        (querySnapshot) {
+      var group = Group.fromFirestore(querySnapshot);
+      return group.shoppingList;
+    }, onError: (e) => throw Exception(e));
+  }
 
+  updateItem(String groupId, ShoppingItem existingItem,
+      ShoppingItem itemToCreate) async {
+    deleteItem(groupId, existingItem);
+    addItem(
+        groupId,
+        itemToCreate.name,
+        itemToCreate.description,
+        itemToCreate.quantity,
+        itemToCreate.unit,
+        itemToCreate.state,
+        existingItem.uuid);
+  }
+
+  deleteItem(String groupId, ShoppingItem shoppingItem) async {
+    await db.collection(collectionId).doc(groupId).update({
+      shoppingListField: FieldValue.arrayRemove([shoppingItem.toFirestore()])
+    }).then((_) {}, onError: (e) => throw Exception(e));
+  }
+
+  addItem(String groupId, String name, String? description, int? quantity,
+      Unit unit, ShoppingItemState state,
+      [String? existingItemId]) async {
+    var itemUuid = existingItemId ?? uuid.v4();
+    var itemToAdd = ShoppingItem(
+        uuid: itemUuid,
+        creatorId: currentUser!.uid,
+        name: name,
+        description: description,
+        quantity: quantity,
+        unit: unit,
+        state: state);
+
+    await db.collection(collectionId).doc(groupId).update({
+      shoppingListField: FieldValue.arrayUnion([itemToAdd.toFirestore()])
+    }).then((_) {}, onError: (e) => throw Exception(e));
   }
 }

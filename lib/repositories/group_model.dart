@@ -18,25 +18,24 @@ class Group {
 
   final List<String> userIds;
 
-  Group(this.id, this.creatorId, this.name, this.description, this.userIds);
-
   final ShoppingList shoppingList;
-  
-  Group(this.id, this.creatorId, this.name, this.description, this.userIds, this.shoppingList);
+
+  Group(this.id, this.creatorId, this.name, this.description, this.userIds,
+      this.shoppingList);
 
   factory Group.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     final data = snapshot.data();
-    
+
     return Group(
-        snapshot.id,
-        data?['creatorId'],
-        data?['name'],
-        data?['description'],
-        data?['userIds'] is Iterable
-            ? List.from(data?['userIds'])
-            : throw Exception("error"),
-        ShoppingList.fromFirestore(data?['shoppingList'] as List),
-        );
+      snapshot.id,
+      data?['creatorId'],
+      data?['name'],
+      data?['description'],
+      data?['userIds'] is Iterable
+          ? List.from(data?['userIds'])
+          : throw Exception("error"),
+      ShoppingList.fromFirestore(data?['shoppingList'] as List),
+    );
   }
 
   Map<String, dynamic> toFirestore() {
