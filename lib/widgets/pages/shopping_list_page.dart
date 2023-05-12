@@ -105,18 +105,21 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => const ShoppingListAddItem(),
-                  );
-                },
+            if (_selectedGroupId != null) ...[
+              Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) =>
+                          ShoppingListAddItem(groupId: _selectedGroupId!),
+                    );
+                  },
+                ),
               ),
-            ),
+            ]
           ],
         ),
       ),

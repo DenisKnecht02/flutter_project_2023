@@ -44,7 +44,7 @@ class Group {
       "name": name,
       "description": description,
       "userIds": userIds,
-      "shoppingList": shoppingList
+      "shoppingList": shoppingList.toFirestore()
     };
   }
 }

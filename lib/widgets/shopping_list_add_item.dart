@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_project_2023/repositories/shopping_item_repository.dart';
 import 'package:flutter_project_2023/shared/enums.dart';
 
 class ShoppingListAddItem extends StatefulWidget {
-  const ShoppingListAddItem({Key? key}) : super(key: key);
+  const ShoppingListAddItem({Key? key, required this.groupId})
+      : super(key: key);
+
+  final String groupId;
 
   @override
   _ShoppingListAddItemState createState() => _ShoppingListAddItemState();
 }
 
 class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
+  String productName = "";
+  String productDescription = "";
+  double productQuantity = 0;
+
   Unit? _selectedUnit;
+  ShoppingItemRepository shoppingItemRepository = ShoppingItemRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +28,7 @@ class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const TextField(
+          TextField(
             decoration: InputDecoration(
               labelText: 'Enter product name',
               border: OutlineInputBorder(
@@ -32,6 +41,27 @@ class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
                 color: Colors.grey,
               ),
             ),
+            onChanged: (value) {
+              productName = value;
+            },
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            decoration: InputDecoration(
+              labelText: 'Enter product description',
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue),
+              ),
+              labelStyle: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            onChanged: (value) {
+              productDescription = value;
+            },
           ),
           const SizedBox(height: 20),
           Row(
@@ -54,6 +84,9 @@ class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly,
                   ],
+                  onChanged: (value) {
+                    productQuantity = double.parse(value);
+                  },
                 ),
               ),
               const SizedBox(width: 10),
@@ -126,6 +159,18 @@ class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
         TextButton(
           child: const Text("OK"),
           onPressed: () {
+            if (_selectedUnit == null) {
+              // TODO: Error Handling
+              return;
+            }
+
+            shoppingItemRepository.addItem(
+                widget.groupId,
+                productName,
+                productDescription,
+                productQuantity,
+                _selectedUnit!,
+                ShoppingItemState.NotBought);
             Navigator.of(context).pop();
           },
         ),

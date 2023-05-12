@@ -8,7 +8,7 @@ class ShoppingItem {
 
   final String? description;
 
-  final int? quantity;
+  final double? quantity;
 
   final Unit unit;
 
@@ -23,11 +23,11 @@ class ShoppingItem {
       required this.unit,
       required this.state});
 
-    Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toFirestore() {
     return {
-      "uuid": uuid, 
+      "uuid": uuid,
       "creatorId": creatorId,
-      "name": name, 
+      "name": name,
       "description": description,
       "quantity": quantity,
       "unit": unit.toString(),

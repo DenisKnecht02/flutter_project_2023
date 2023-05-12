@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_project_2023/repositories/group_model.dart';
+import 'package:flutter_project_2023/repositories/group_repository.dart';
 import 'package:flutter_project_2023/shared/enums.dart';
 
 class GroupWidget extends StatefulWidget {
@@ -13,6 +16,8 @@ class GroupWidget extends StatefulWidget {
 
 class _GroupWidgetState extends State<GroupWidget> {
   final _meatballMenuIcon = const Icon(Icons.more_vert);
+
+  GroupRepository groupRepository = GroupRepository();
 
   late String groupName;
   late String groupDescription;
@@ -130,7 +135,23 @@ class _GroupWidgetState extends State<GroupWidget> {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
+                      groupRepository.updateGroupInfo(
+                          widget.group.id, groupName, groupDescription);
+
+                      List<String> removedUserIds =
+                          widget.group.userIds.where((element) {
+                        return !userIds.contains(element);
+                      }).toList();
+
+                      print(removedUserIds);
+
+                      for (var removedUserId in removedUserIds) {
+                        groupRepository.removeUser(
+                            widget.group.id, removedUserId);
+                      }
+
                       Navigator.pop(context);
+                      // TODO: refresh page
                     },
                     icon: const Icon(
                       Icons.save,
@@ -219,17 +240,20 @@ class _GroupWidgetState extends State<GroupWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      showEditScreen();
-                    },
-                    icon: const Icon(
-                      Icons.edit,
-                      size: 24.0,
+                  if (widget.group.creatorId ==
+                      FirebaseAuth.instance.currentUser!.uid) ...[
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        showEditScreen();
+                      },
+                      icon: const Icon(
+                        Icons.edit,
+                        size: 24.0,
+                      ),
+                      label: const Text('Edit'),
                     ),
-                    label: const Text('Edit'),
-                  ),
-                  const SizedBox(width: 16),
+                    const SizedBox(width: 16),
+                  ],
                   ElevatedButton.icon(
                     onPressed: () {
                       Navigator.pop(context);
@@ -284,12 +308,14 @@ class _GroupWidgetState extends State<GroupWidget> {
                 ),
               ),
         trailing: PopupMenuButton(
-          onSelected: (value) {
+          onSelected: (value) async {
             switch (value) {
               case 'delete':
-                // handle delete action
+                groupRepository.deleteGroup(widget.group.id);
+                // TODO: refresh page
                 break;
               case 'copy_invite_code':
+                await Clipboard.setData(ClipboardData(text: widget.group.id));
                 break;
               case 'view_details':
                 showEditScreen();

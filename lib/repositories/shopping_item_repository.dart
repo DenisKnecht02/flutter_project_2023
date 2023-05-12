@@ -39,7 +39,7 @@ class ShoppingItemRepository {
     }).then((_) {}, onError: (e) => throw Exception(e));
   }
 
-  addItem(String groupId, String name, String? description, int? quantity,
+  addItem(String groupId, String name, String? description, double? quantity,
       Unit unit, ShoppingItemState state,
       [String? existingItemId]) async {
     var itemUuid = existingItemId ?? uuid.v4();
