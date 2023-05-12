@@ -17,8 +17,11 @@ class Group {
   final String? description;
 
   final List<String> userIds;
+<<<<<<< HEAD
 
   Group(this.id, this.creatorId, this.name, this.description, this.userIds);
+=======
+>>>>>>> firebase_implementation
 
   final ShoppingList shoppingList;
   

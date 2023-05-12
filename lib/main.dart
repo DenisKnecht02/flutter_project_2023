@@ -1,18 +1,26 @@
+import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_project_2023/repositories/group_model.dart';
 import 'package:flutter_project_2023/widgets/pages/group_page.dart';
 import 'package:flutter_project_2023/firebase_options.dart';
 import 'package:flutter_project_2023/widgets/pages/settings_page.dart';
-
+import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter_project_2023/widgets/pages/shopping_list_page.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  var user = FirebaseAuth.instance.currentUser;
+
+  debugPrint(user != null ? user.uid.toString() : 'user is null');
   runApp(const MyApp());
 }
 
@@ -21,14 +29,32 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var providers = [EmailAuthProvider()];
     return MaterialApp(
+      initialRoute: FirebaseAuth.instance.currentUser == null
+          ? '/sign-in'
+          : '/my-group-cart',
+      routes: {
+        '/sign-in': (context) {
+          return SignInScreen(
+            providers: providers,
+            actions: [
+              AuthStateChangeAction<SignedIn>((context, state) {
+                Navigator.pushReplacementNamed(context, '/my-group-cart');
+              }),
+            ],
+          );
+        },
+        '/my-group-cart': (context) {
+          return const MyHomePage(title: 'GroupCart');
+        },
+      },
       title: 'GroupCart',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         cardColor: Colors.deepPurple.shade50,
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'GroupCart'),
     );
   }
 }
@@ -52,9 +78,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   static List<Widget> _pages = <Widget>[
-    GrouPage(),
+    GroupPage(),
     ShoppingListPage(),
-    SettingsPage(),
+    ProfileScreen(
+      providers: [EmailAuthProvider()],
+      actions: [
+        SignedOutAction((context) {
+          Navigator.pushReplacementNamed(context, '/sign-in');
+        }),
+      ],
+    ),
   ];
 
   @override

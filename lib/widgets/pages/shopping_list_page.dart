@@ -6,6 +6,8 @@ import 'package:flutter_project_2023/widgets/shopping_list_add_item.dart';
 import '../../shared/enums.dart';
 import '../shopping_list_delete_item.dart';
 
+import '../../repositories/shopping_list_model.dart';
+
 class ShoppingListPage extends StatefulWidget {
   const ShoppingListPage({Key? key}) : super(key: key);
 
@@ -104,7 +106,7 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
         ),
       ),
       body: FutureBuilder(
-        future: shoppingListRepository.getShoppingList(),
+        future: shoppingListRepository.getShoppingList("iDKiBckvDAkp4P5mF52q") , //ToDo: implement GroupId
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             // sort the items by state: NotBought -> NotAvailable -> Bought

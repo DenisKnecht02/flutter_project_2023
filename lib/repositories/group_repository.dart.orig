@@ -9,8 +9,20 @@ import 'package:flutter_project_2023/repositories/shopping_list_model.dart';
 import 'package:flutter_project_2023/shared/constants.dart';
 
 class GroupRepository {
+<<<<<<< HEAD
+  Future<Groups> getGroups() async {
+    var groups = Groups([
+      Group(
+          1, "user#1", "Wohnung Berlin", null, ["user#1", "user#2", "user#3"]),
+      Group(2, "user#2", "WG Köln", "WG Gruppe in Köln",
+          ["user#1", "user#2", "user#3"]),
+      Group(3, "user#3", "Großeltern München", null,
+          ["user#1", "user#2", "user#3"]),
+    ]);
+=======
   final currentUser = FirebaseAuth.instance.currentUser;
   final db = FirebaseFirestore.instance;
+>>>>>>> firebase_implementation
 
   createGroup(String name, String description) async {
     var group = Group("", currentUser!.uid, name, description, [currentUser!.uid], ShoppingList(items: []));

@@ -1,35 +1,17 @@
-import 'dart:convert';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_project_2023/repositories/shopping_item_model.dart';
 import 'package:flutter_project_2023/repositories/shopping_list_model.dart';
 import 'package:flutter_project_2023/shared/enums.dart';
+import 'package:uuid/uuid.dart';
+import '../shared/constants.dart';
+import 'group_model.dart';
 
 class ShoppingItemRepository {
-  Future<ShoppingList> getShoppingList() async {
-    var shoppingList = ShoppingList(items: [
-      ShoppingItem(
-          id: 1,
-          creatorId: "user#1",
-          name: "Milch",
-          quantity: 1,
-          unit: Unit.Bottle,
-          state: ShoppingItemState.Bought),
-      ShoppingItem(
-          id: 2,
-          creatorId: "user#1",
-          name: "Käse",
-          quantity: 2,
-          unit: Unit.Package,
-          state: ShoppingItemState.NotBought),
-      ShoppingItem(
-          id: 2,
-          creatorId: "user#2",
-          name: "Käse",
-          quantity: 2,
-          unit: Unit.Package,
-          state: ShoppingItemState.NotAvailable),
-    ]);
+  final uuid = Uuid();
+  final currentUser = FirebaseAuth.instance.currentUser;
+  final db = FirebaseFirestore.instance;
 
-    return shoppingList;
   }
 }
