@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_project_2023/repositories/shopping_item_repository.dart';
 import 'package:flutter_project_2023/shared/enums.dart';
 
 class ShoppingListDeleteItem extends StatefulWidget {
-  const ShoppingListDeleteItem({Key? key}) : super(key: key);
+  final String groupId;
+
+  const ShoppingListDeleteItem({Key? key, required this.groupId})
+      : super(key: key);
 
   @override
   _ShoppingListDeleteItemState createState() => _ShoppingListDeleteItemState();
 }
 
 class _ShoppingListDeleteItemState extends State<ShoppingListDeleteItem> {
-  bool _allSelected = false;
-  bool _boughtSelected = false;
-  bool _notAvailableSelected = false;
+  ShoppingItemRepository shoppingItemRepository = ShoppingItemRepository();
+
+  Map<DeleteItemsFilter, bool> selected = Map();
 
   @override
   Widget build(BuildContext context) {
@@ -20,47 +24,34 @@ class _ShoppingListDeleteItemState extends State<ShoppingListDeleteItem> {
       title: const Text("Select Items to Delete"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          CheckboxListTile(
-            title: const Text("Bought"),
-            value: _boughtSelected,
+        children: DeleteItemsFilter.values.map((filter) {
+          return CheckboxListTile(
+            title: Text(filter.toString().split(".")[1]),
+            value: selected[filter] ?? false,
             onChanged: (bool? value) {
               setState(() {
-                _boughtSelected = value ?? false;
-                if (_boughtSelected && _notAvailableSelected) {
-                  _allSelected = false;
+                selected[filter] = !(selected[filter] ?? false);
+
+                if (filter == DeleteItemsFilter.All) {
+                  for (var f in DeleteItemsFilter.values) {
+                    selected[f] = selected[filter] ?? false;
+                  }
                 } else {
-                  _allSelected = _boughtSelected && _notAvailableSelected;
+                  var allSelected = true;
+                  for (var f in DeleteItemsFilter.values) {
+                    if (f != DeleteItemsFilter.All &&
+                        (selected[f] ?? false) == false) {
+                      allSelected = false;
+                      break;
+                    }
+                  }
+
+                  selected[DeleteItemsFilter.All] = allSelected;
                 }
               });
             },
-          ),
-          CheckboxListTile(
-            title: const Text("Not Available"),
-            value: _notAvailableSelected,
-            onChanged: (bool? value) {
-              setState(() {
-                _notAvailableSelected = value ?? false;
-                if (_boughtSelected && _notAvailableSelected) {
-                  _allSelected = false;
-                } else {
-                  _allSelected = _boughtSelected && _notAvailableSelected;
-                }
-              });
-            },
-          ),
-          CheckboxListTile(
-            title: const Text("All"),
-            value: _allSelected,
-            onChanged: (bool? value) {
-              setState(() {
-                _allSelected = value ?? false;
-                _boughtSelected = value ?? false;
-                _notAvailableSelected = value ?? false;
-              });
-            },
-          ),
-        ],
+          );
+        }).toList(),
       ),
       actions: [
         TextButton(
@@ -72,9 +63,17 @@ class _ShoppingListDeleteItemState extends State<ShoppingListDeleteItem> {
         TextButton(
           child: const Text("OK"),
           onPressed: () {
-            // Do something with the selected items
-            print(
-                "All: $_allSelected, Bought: $_boughtSelected, Not Available: $_notAvailableSelected");
+            List<DeleteItemsFilter> selectedFilters = [];
+
+            for (var selectedFilter in selected.entries) {
+              if (selectedFilter.key != DeleteItemsFilter.All &&
+                  selectedFilter.value == true) {
+                selectedFilters.add(selectedFilter.key);
+              }
+            }
+
+            shoppingItemRepository.deleteItems(widget.groupId, selectedFilters);
+
             Navigator.of(context).pop();
           },
         ),

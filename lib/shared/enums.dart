@@ -16,3 +16,5 @@ enum Unit {
 }
 
 enum ShoppingItemState { Bought, NotBought, NotAvailable }
+
+enum DeleteItemsFilter { Bought, NotBought, NotAvailable, All }

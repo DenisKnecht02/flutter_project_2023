@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_project_2023/repositories/shopping_item_model.dart';
 
 import '../shared/enums.dart';
@@ -20,6 +21,7 @@ class ShoppingList {
       shoppingList.add(ShoppingItem(
         uuid: item?['uuid'],
         creatorId: item?['creatorId'],
+        createdDate: item?['createdDate'],
         name: item?['name'],
         description: item?['description'],
         quantity: quantity,

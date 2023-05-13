@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_project_2023/repositories/shopping_item_repository.dart';
@@ -168,6 +169,7 @@ class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
                 widget.groupId,
                 productName,
                 productDescription,
+                Timestamp.now(),
                 productQuantity,
                 _selectedUnit!,
                 ShoppingItemState.NotBought);

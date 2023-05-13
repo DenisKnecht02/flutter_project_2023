@@ -98,27 +98,14 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final group = Group.fromFirestore(snapshot.data!);
-                    // sort the items by state: NotBought -> NotAvailable -> Bought
-                    final sortedItems = group.shoppingList.items
-                      ..sort((a, b) {
-                        if (a.state == b.state) {
-                          return 0;
-                        } else if (a.state == ShoppingItemState.NotBought) {
-                          return -1;
-                        } else if (b.state == ShoppingItemState.NotBought) {
-                          return 1;
-                        } else if (a.state == ShoppingItemState.NotAvailable) {
-                          return -1;
-                        } else if (b.state == ShoppingItemState.NotAvailable) {
-                          return 1;
-                        } else {
-                          return 1;
-                        }
-                      });
+                    var items = [...group.shoppingList.items];
+                    items.sort((a, b) {
+                      return a.createdDate.compareTo(b.createdDate);
+                    });
 
                     return SingleChildScrollView(
                       child: Column(
-                        children: sortedItems
+                        children: items
                             .map((item) => ShoppingItemWidget(
                                 groupId: _selectedGroupId!, shoppingItem: item))
                             .toList(),
@@ -156,7 +143,8 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                             return StatefulBuilder(
                               builder: (BuildContext context,
                                       StateSetter setState) =>
-                                  const ShoppingListDeleteItem(),
+                                  ShoppingListDeleteItem(
+                                      groupId: _selectedGroupId!),
                             );
                           },
                         );

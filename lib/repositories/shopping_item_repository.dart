@@ -26,8 +26,8 @@ class ShoppingItemRepository {
 
   updateItem(String groupId, ShoppingItem item) async {
     await deleteItem(groupId, item.uuid);
-    await addItem(groupId, item.name, item.description, item.quantity,
-        item.unit, item.state, item.uuid);
+    await addItem(groupId, item.name, item.description, item.createdDate,
+        item.quantity, item.unit, item.state, item.uuid);
   }
 
   deleteItem(String groupId, String itemId) async {
@@ -54,13 +54,52 @@ class ShoppingItemRepository {
     }
   }
 
-  addItem(String groupId, String name, String? description, double? quantity,
-      Unit unit, ShoppingItemState state,
+  deleteItems(String groupId, List<DeleteItemsFilter> filter) async {
+    if (filter.isEmpty) return;
+
+    var docRef = db.collection(collectionId).doc(groupId);
+    var snapshot = await docRef.get();
+    var group = Group.fromFirestore(snapshot);
+
+    List<ShoppingItem> items = [];
+    for (var item in group.shoppingList.items) {
+      for (var f in filter) {
+        if (item.state.toString().split(".")[1] == f.toString().split(".")[1]) {
+          items.add(item);
+        }
+      }
+    }
+
+    List<Map<String, dynamic>> firestoreItems = [];
+
+    for (var item in items) {
+      firestoreItems.add(item.toFirestore());
+    }
+
+    if (firestoreItems.isNotEmpty) {
+      try {
+        await docRef.update(
+            {shoppingListField: FieldValue.arrayRemove(firestoreItems)});
+      } catch (e) {
+        throw Exception(e);
+      }
+    }
+  }
+
+  addItem(
+      String groupId,
+      String name,
+      String? description,
+      Timestamp createdDate,
+      double? quantity,
+      Unit unit,
+      ShoppingItemState state,
       [String? existingItemId]) async {
     var itemUuid = existingItemId ?? uuid.v4();
     var itemToAdd = ShoppingItem(
         uuid: itemUuid,
         creatorId: currentUser!.uid,
+        createdDate: createdDate,
         name: name,
         description: description,
         quantity: quantity,
