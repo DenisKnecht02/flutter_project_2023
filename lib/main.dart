@@ -1,14 +1,11 @@
-import 'dart:developer';
-import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project_2023/repositories/group_model.dart';
+import 'package:flutter_project_2023/repositories/user_repository.dart';
 import 'package:flutter_project_2023/widgets/pages/group_page.dart';
 import 'package:flutter_project_2023/firebase_options.dart';
-import 'package:flutter_project_2023/widgets/pages/settings_page.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:flutter_project_2023/widgets/pages/settings_page.dart';
 import 'package:flutter_project_2023/widgets/pages/shopping_list_page.dart';
 
 void main() async {
@@ -21,11 +18,13 @@ void main() async {
   var user = FirebaseAuth.instance.currentUser;
 
   debugPrint(user != null ? user.uid.toString() : 'user is null');
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final UserRepository userRepository = UserRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +39,12 @@ class MyApp extends StatelessWidget {
             providers: providers,
             actions: [
               AuthStateChangeAction<SignedIn>((context, state) {
+                Navigator.pushReplacementNamed(context, '/my-group-cart');
+              }),
+              AuthStateChangeAction<UserCreated>((context, state) {
+                if (state.credential.user == null) return;
+
+                userRepository.registerUser(state.credential.user!);
                 Navigator.pushReplacementNamed(context, '/my-group-cart');
               }),
             ],
@@ -80,14 +85,15 @@ class _MyHomePageState extends State<MyHomePage> {
   static List<Widget> _pages = <Widget>[
     GroupPage(),
     ShoppingListPage(),
-    ProfileScreen(
-      providers: [EmailAuthProvider()],
-      actions: [
-        SignedOutAction((context) {
-          Navigator.pushReplacementNamed(context, '/sign-in');
-        }),
-      ],
-    ),
+    SettingsPage()
+    // ProfileScreen(
+    //   providers: [EmailAuthProvider()],
+    //   actions: [
+    //     SignedOutAction((context) {
+    //       Navigator.pushReplacementNamed(context, '/sign-in');
+    //     }),
+    //   ],
+    // ),
   ];
 
   @override

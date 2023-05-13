@@ -13,7 +13,7 @@ class ShoppingItemRepository {
   final currentUser = FirebaseAuth.instance.currentUser;
   final db = FirebaseFirestore.instance;
   Future<ShoppingList> getShoppingList(String groupId) async {
-    return await db.collection(collectionId).doc(groupId).get().then(
+    return await db.collection(groupCollectionId).doc(groupId).get().then(
         (querySnapshot) {
       var group = Group.fromFirestore(querySnapshot);
       return group.shoppingList;
@@ -21,7 +21,7 @@ class ShoppingItemRepository {
   }
 
   getShoppingListStream(String groupId) {
-    return db.collection(collectionId).doc(groupId).snapshots();
+    return db.collection(groupCollectionId).doc(groupId).snapshots();
   }
 
   updateItem(String groupId, ShoppingItem item) async {
@@ -31,7 +31,7 @@ class ShoppingItemRepository {
   }
 
   deleteItem(String groupId, String itemId) async {
-    var docRef = db.collection(collectionId).doc(groupId);
+    var docRef = db.collection(groupCollectionId).doc(groupId);
     var snapshot = await docRef.get();
     var group = Group.fromFirestore(snapshot);
 
@@ -57,7 +57,7 @@ class ShoppingItemRepository {
   deleteItems(String groupId, List<DeleteItemsFilter> filter) async {
     if (filter.isEmpty) return;
 
-    var docRef = db.collection(collectionId).doc(groupId);
+    var docRef = db.collection(groupCollectionId).doc(groupId);
     var snapshot = await docRef.get();
     var group = Group.fromFirestore(snapshot);
 
@@ -107,7 +107,7 @@ class ShoppingItemRepository {
         state: state);
 
     try {
-      await db.collection(collectionId).doc(groupId).update({
+      await db.collection(groupCollectionId).doc(groupId).update({
         shoppingListField: FieldValue.arrayUnion([itemToAdd.toFirestore()])
       });
     } catch (e) {

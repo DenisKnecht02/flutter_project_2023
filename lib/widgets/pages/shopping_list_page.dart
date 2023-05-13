@@ -27,7 +27,9 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
 
   getGroupNames() async {
     userGroups = await groupRepository.getGroups();
-    _selectedGroupId = userGroups.groups.first.id;
+    if (userGroups.groups.isNotEmpty) {
+      _selectedGroupId = userGroups.groups.first.id;
+    }
     setState(() {});
   }
 
