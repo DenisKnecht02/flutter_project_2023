@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_admin/firebase_admin.dart';
-import 'package:firebase_admin/src/credential.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_project_2023/firebase_options.dart';
 import 'package:flutter_project_2023/repositories/group_model.dart';
