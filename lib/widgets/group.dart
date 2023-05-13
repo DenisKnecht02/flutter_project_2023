@@ -156,6 +156,7 @@ class _GroupWidgetState extends State<GroupWidget> {
                       }
 
                       Navigator.pop(context);
+                      Navigator.pop(context);
                     },
                     icon: const Icon(
                       Icons.save,
@@ -289,7 +290,7 @@ class _GroupWidgetState extends State<GroupWidget> {
       padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        color: Theme.of(context).cardColor,
+        color: Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.grey[400]!,
