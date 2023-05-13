@@ -91,11 +91,24 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
           ),
         ),
         body: _selectedGroupId == null
-            ? null
+            ? const Center(
+                child: Text(
+                    "You are currently not a member of a group! You can create a new or join an existing group in the group tab.",
+                    style: TextStyle(
+                      fontSize: 24,
+                    ),
+                    textAlign: TextAlign.center),
+              )
             : StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                 stream: shoppingListRepository
                     .getShoppingListStream(_selectedGroupId!),
                 builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
                   if (snapshot.hasData) {
                     final group = Group.fromFirestore(snapshot.data!);
                     var items = [...group.shoppingList.items];
@@ -103,19 +116,34 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                       return a.createdDate.compareTo(b.createdDate);
                     });
 
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: items
-                            .map((item) => ShoppingItemWidget(
-                                groupId: _selectedGroupId!, shoppingItem: item))
-                            .toList(),
-                      ),
+                    return group.shoppingList.items.isEmpty
+                        ? const Center(
+                            child: Text(
+                                "There are currently no items in this list! You can add a new one with the button below.",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                ),
+                                textAlign: TextAlign.center),
+                          )
+                        : SingleChildScrollView(
+                            child: Column(
+                              children: items
+                                  .map((item) => ShoppingItemWidget(
+                                      groupId: _selectedGroupId!,
+                                      shoppingItem: item))
+                                  .toList(),
+                            ),
+                          );
+                  } else {
+                    return const Center(
+                      child: Text(
+                          "You are currently not a member of a group! You can create a new or join an existing group in the group tab.",
+                          style: TextStyle(
+                            fontSize: 24,
+                          ),
+                          textAlign: TextAlign.center),
                     );
                   }
-
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
                 },
               ),
         backgroundColor: Colors.white,
