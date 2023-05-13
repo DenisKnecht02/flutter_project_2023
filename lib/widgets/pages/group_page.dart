@@ -96,6 +96,8 @@ class _GroupPageState extends State<GroupPage> {
                                     onPressed: () {
                                       groupRepository.createGroup(
                                           groupName, groupDescription);
+                                      groupName = "";
+                                      groupDescription = "";
                                       Navigator.pop(context);
                                       setState(() {});
                                     }),
