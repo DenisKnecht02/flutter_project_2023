@@ -36,6 +36,12 @@ class GroupRepository {
     return Groups(groups);
   }
 
+  getGroupsStream() {
+    return db
+        .collection(collectionId)
+        .where(userIdsField, arrayContainsAny: [currentUser?.uid]).snapshots();
+  }
+
   updateGroupInfo(String groupId, String name, String description) async {
     await db
         .collection(collectionId)

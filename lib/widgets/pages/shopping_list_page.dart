@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project_2023/repositories/group_model.dart';
 import 'package:flutter_project_2023/repositories/group_repository.dart';
@@ -125,12 +126,14 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
       ),
       body: _selectedGroupId == null
           ? null
-          : FutureBuilder(
-              future: shoppingListRepository.getShoppingList(_selectedGroupId!),
+          : StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              stream: shoppingListRepository
+                  .getShoppingListStream(_selectedGroupId!),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  final group = Group.fromFirestore(snapshot.data!);
                   // sort the items by state: NotBought -> NotAvailable -> Bought
-                  final sortedItems = snapshot.data!.items.toList()
+                  final sortedItems = group.shoppingList.items
                     ..sort((a, b) {
                       if (a.state == b.state) {
                         return 0;

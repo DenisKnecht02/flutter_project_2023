@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project_2023/repositories/group_repository.dart';
+import 'package:flutter_project_2023/repositories/groups_model.dart';
 import 'package:flutter_project_2023/repositories/shopping_item_repository.dart';
 import 'package:flutter_project_2023/widgets/group.dart';
 import 'package:flutter_project_2023/widgets/shopping_item.dart';
@@ -24,33 +26,35 @@ class _GroupPageState extends State<GroupPage> {
     return Scaffold(
         body: Container(
           margin: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-          child: FutureBuilder(
-            future: groupRepository.getGroups(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return snapshot.data!.groups.isEmpty
-                    ? const Center(
-                        child: Text(
-                            "You are currently not a member of a group! You can create a new or join an existing group.",
-                            style: TextStyle(
-                              fontSize: 24,
-                            ),
-                            textAlign: TextAlign.center),
-                      )
-                    : SingleChildScrollView(
-                        child: Column(
-                          children: snapshot.data!.groups
-                              .map((item) => GroupWidget(group: item))
-                              .toList(),
-                        ),
-                      );
-              }
+          child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: groupRepository.getGroupsStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  Groups groups =
+                      Groups.fromFirestoreStream(snapshot.data!.docs);
 
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          ),
+                  return groups.groups.isEmpty
+                      ? const Center(
+                          child: Text(
+                              "You are currently not a member of a group! You can create a new or join an existing group.",
+                              style: TextStyle(
+                                fontSize: 24,
+                              ),
+                              textAlign: TextAlign.center),
+                        )
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: groups.groups
+                                .map((item) => GroupWidget(group: item))
+                                .toList(),
+                          ),
+                        );
+                }
+
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }),
         ),
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,

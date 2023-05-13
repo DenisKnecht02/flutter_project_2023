@@ -20,6 +20,10 @@ class ShoppingItemRepository {
     }, onError: (e) => throw Exception(e));
   }
 
+  getShoppingListStream(String groupId) {
+    return db.collection(collectionId).doc(groupId).snapshots();
+  }
+
   updateItem(String groupId, ShoppingItem existingItem,
       ShoppingItem itemToCreate) async {
     deleteItem(groupId, existingItem);
