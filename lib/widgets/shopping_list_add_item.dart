@@ -29,7 +29,7 @@ class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Enter product name',
               border: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
@@ -47,7 +47,7 @@ class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
           ),
           const SizedBox(height: 20),
           TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Enter product description',
               border: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey),
