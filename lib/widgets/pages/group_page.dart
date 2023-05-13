@@ -28,14 +28,22 @@ class _GroupPageState extends State<GroupPage> {
             future: groupRepository.getGroups(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return SingleChildScrollView(
-                  child: Column(
-                    children: snapshot.data?.groups
-                            .map((item) => GroupWidget(group: item))
-                            .toList() ??
-                        [],
-                  ),
-                );
+                return snapshot.data!.groups.isEmpty
+                    ? const Center(
+                        child: Text(
+                            "You are currently not a member of a group! You can create a new or join an existing group.",
+                            style: TextStyle(
+                              fontSize: 24,
+                            ),
+                            textAlign: TextAlign.center),
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                          children: snapshot.data!.groups
+                              .map((item) => GroupWidget(group: item))
+                              .toList(),
+                        ),
+                      );
               }
 
               return const Center(
@@ -154,13 +162,37 @@ class _GroupPageState extends State<GroupPage> {
                               children: [
                                 ElevatedButton(
                                     child: const Text('Join group'),
-                                    onPressed: () {
-                                      groupRepository.addUser(
-                                          inviteCode,
-                                          FirebaseAuth
-                                              .instance.currentUser!.uid);
-                                      Navigator.pop(context);
-                                      setState(() {});
+                                    onPressed: () async {
+                                      try {
+                                        await groupRepository.addUser(
+                                            inviteCode,
+                                            FirebaseAuth
+                                                .instance.currentUser!.uid);
+                                        // ignore: use_build_context_synchronously
+                                        Navigator.pop(context);
+                                        setState(() {});
+                                      } catch (e) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: const Text('Error'),
+                                            content: const Text(
+                                                'The invite code is invalid!'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context,
+                                                          rootNavigator: true)
+                                                      .pop(); // dismisses only the dialog and returns nothing
+                                                },
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                        inviteCode = "";
+                                        setState(() {});
+                                      }
                                       // TODO: refresh page
                                     }),
                                 const SizedBox(
