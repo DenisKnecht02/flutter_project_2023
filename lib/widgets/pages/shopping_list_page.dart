@@ -38,141 +38,131 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: AppBar(
-          centerTitle: false,
-          title: DropdownButton<String>(
-            value: _selectedGroupId,
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedGroupId = newValue;
-              });
-            },
-            items:
-                userGroups.groups.map<DropdownMenuItem<String>>((Group value) {
-              return DropdownMenuItem<String>(
-                value: value.id,
-                child: Text(
-                  value.name,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.normal,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: AppBar(
+            centerTitle: false,
+            title: DropdownButton<String>(
+              value: _selectedGroupId,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedGroupId = newValue;
+                });
+              },
+              items: userGroups.groups
+                  .map<DropdownMenuItem<String>>((Group value) {
+                return DropdownMenuItem<String>(
+                  value: value.id,
+                  child: Text(
+                    value.name,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
+                );
+              }).toList(),
+              style: const TextStyle(color: Colors.black),
+              hint: const Text(
+                'Select a Group',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
                 ),
-              );
-            }).toList(),
-            style: const TextStyle(color: Colors.black),
-            hint: const Text(
-              'Select a Group',
-              style: TextStyle(
+              ),
+              underline: Container(
+                height: 2,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+              ),
+              icon: const Icon(
+                Icons.keyboard_arrow_down_rounded,
                 color: Colors.black,
-                fontWeight: FontWeight.normal,
               ),
+              iconSize: 24,
+              iconEnabledColor: Colors.black,
+              dropdownColor: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              elevation: 8,
             ),
-            underline: Container(
-              height: 2,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-            ),
-            icon: const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: Colors.black,
-            ),
-            iconSize: 24,
-            iconEnabledColor: Colors.black,
-            dropdownColor: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            elevation: 8,
+            backgroundColor: Colors.white,
           ),
-          backgroundColor: Colors.white,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: IconButton(
-                icon: const Icon(Icons.delete_outlined),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return StatefulBuilder(
-                        builder: (BuildContext context, StateSetter setState) =>
-                            const ShoppingListDeleteItem(),
-                      );
-                    },
+        ),
+        body: _selectedGroupId == null
+            ? null
+            : StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                stream: shoppingListRepository
+                    .getShoppingListStream(_selectedGroupId!),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final group = Group.fromFirestore(snapshot.data!);
+                    // sort the items by state: NotBought -> NotAvailable -> Bought
+                    final sortedItems = group.shoppingList.items
+                      ..sort((a, b) {
+                        if (a.state == b.state) {
+                          return 0;
+                        } else if (a.state == ShoppingItemState.NotBought) {
+                          return -1;
+                        } else if (b.state == ShoppingItemState.NotBought) {
+                          return 1;
+                        } else if (a.state == ShoppingItemState.NotAvailable) {
+                          return -1;
+                        } else if (b.state == ShoppingItemState.NotAvailable) {
+                          return 1;
+                        } else {
+                          return 1;
+                        }
+                      });
+
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: sortedItems
+                            .map((item) => ShoppingItemWidget(
+                                groupId: _selectedGroupId!, shoppingItem: item))
+                            .toList(),
+                      ),
+                    );
+                  }
+
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
                 },
               ),
-            ),
-            if (_selectedGroupId != null) ...[
-              Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) =>
-                          ShoppingListAddItem(groupId: _selectedGroupId!),
-                    );
-                  },
-                ),
-              ),
-            ]
-          ],
-        ),
-      ),
-      body: _selectedGroupId == null
-          ? null
-          : StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-              stream: shoppingListRepository
-                  .getShoppingListStream(_selectedGroupId!),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final group = Group.fromFirestore(snapshot.data!);
-                  // sort the items by state: NotBought -> NotAvailable -> Bought
-                  final sortedItems = group.shoppingList.items
-                    ..sort((a, b) {
-                      if (a.state == b.state) {
-                        return 0;
-                      } else if (a.state == ShoppingItemState.NotBought) {
-                        return -1;
-                      } else if (b.state == ShoppingItemState.NotBought) {
-                        return 1;
-                      } else if (a.state == ShoppingItemState.NotAvailable) {
-                        return -1;
-                      } else if (b.state == ShoppingItemState.NotAvailable) {
-                        return 1;
-                      } else {
-                        return 1;
-                      }
-                    });
-
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: sortedItems
-                          .map((item) => ShoppingItemWidget(
-                              groupId: _selectedGroupId!, shoppingItem: item))
-                          .toList(),
-                    ),
-                  );
-                }
-
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            ),
-      backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          setState(() {});
-        },
-        icon: const Icon(Icons.refresh),
-        label: const Text('Refresh'),
-      ),
-    );
+        backgroundColor: Colors.white,
+        floatingActionButton: _selectedGroupId == null
+            ? null
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  FloatingActionButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) =>
+                              ShoppingListAddItem(groupId: _selectedGroupId!),
+                        );
+                      },
+                      child: const Icon(Icons.add)),
+                  const SizedBox(width: 20),
+                  FloatingActionButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return StatefulBuilder(
+                              builder: (BuildContext context,
+                                      StateSetter setState) =>
+                                  const ShoppingListDeleteItem(),
+                            );
+                          },
+                        );
+                      },
+                      child: const Icon(Icons.delete_outline)),
+                ],
+              ));
   }
 }
