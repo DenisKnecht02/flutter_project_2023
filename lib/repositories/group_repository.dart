@@ -50,10 +50,10 @@ class GroupRepository {
     }).then((_) {}, onError: (e) => throw Exception(e));
   }
 
-  addUser(String groupId, String userId) async {
-    await db.collection(collectionId).doc(groupId).update({
+  Future<void> addUser(String groupId, String userId) async {
+    return db.collection(collectionId).doc(groupId).update({
       userIdsField: FieldValue.arrayUnion([userId])
-    }).then((_) {}, onError: (e) => throw Exception(e));
+    });
   }
   //TODO: Exception Handling
 
