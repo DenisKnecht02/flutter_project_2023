@@ -11,12 +11,18 @@ class ShoppingList {
     List<ShoppingItem> shoppingList = [];
 
     for (var item in fetchedShoppingList) {
+      double quantity = 0;
+
+      if (item["quantity"] != null) {
+        quantity = double.parse(item["quantity"].toString());
+      }
+
       shoppingList.add(ShoppingItem(
         uuid: item?['uuid'],
         creatorId: item?['creatorId'],
         name: item?['name'],
         description: item?['description'],
-        quantity: item?['quantity'],
+        quantity: quantity,
         unit: Unit.values
             .firstWhere((e) => e.toString() == item?['unit'].toString()),
         state: ShoppingItemState.values

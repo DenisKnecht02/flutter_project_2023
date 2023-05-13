@@ -34,4 +34,15 @@ class ShoppingItem {
       "state": state.toString()
     };
   }
+
+  ShoppingItem copy() {
+    return ShoppingItem(
+        uuid: uuid,
+        creatorId: creatorId,
+        name: name,
+        description: description,
+        quantity: quantity,
+        unit: unit,
+        state: state);
+  }
 }

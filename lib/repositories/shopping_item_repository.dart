@@ -24,23 +24,34 @@ class ShoppingItemRepository {
     return db.collection(collectionId).doc(groupId).snapshots();
   }
 
-  updateItem(String groupId, ShoppingItem existingItem,
-      ShoppingItem itemToCreate) async {
-    deleteItem(groupId, existingItem);
-    addItem(
-        groupId,
-        itemToCreate.name,
-        itemToCreate.description,
-        itemToCreate.quantity,
-        itemToCreate.unit,
-        itemToCreate.state,
-        existingItem.uuid);
+  updateItem(String groupId, ShoppingItem item) async {
+    await deleteItem(groupId, item.uuid);
+    await addItem(groupId, item.name, item.description, item.quantity,
+        item.unit, item.state, item.uuid);
   }
 
-  deleteItem(String groupId, ShoppingItem shoppingItem) async {
-    await db.collection(collectionId).doc(groupId).update({
-      shoppingListField: FieldValue.arrayRemove([shoppingItem.toFirestore()])
-    }).then((_) {}, onError: (e) => throw Exception(e));
+  deleteItem(String groupId, String itemId) async {
+    var docRef = db.collection(collectionId).doc(groupId);
+    var snapshot = await docRef.get();
+    var group = Group.fromFirestore(snapshot);
+
+    var items = group.shoppingList.items
+        .where((element) => element.uuid == itemId)
+        .toList();
+
+    Map<String, dynamic>? item;
+
+    if (items.isNotEmpty) {
+      item = items[0].toFirestore();
+
+      try {
+        await docRef.update({
+          shoppingListField: FieldValue.arrayRemove([item])
+        });
+      } catch (e) {
+        throw Exception(e);
+      }
+    }
   }
 
   addItem(String groupId, String name, String? description, double? quantity,
@@ -56,8 +67,12 @@ class ShoppingItemRepository {
         unit: unit,
         state: state);
 
-    await db.collection(collectionId).doc(groupId).update({
-      shoppingListField: FieldValue.arrayUnion([itemToAdd.toFirestore()])
-    }).then((_) {}, onError: (e) => throw Exception(e));
+    try {
+      await db.collection(collectionId).doc(groupId).update({
+        shoppingListField: FieldValue.arrayUnion([itemToAdd.toFirestore()])
+      });
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

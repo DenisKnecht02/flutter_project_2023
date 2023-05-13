@@ -5,9 +5,12 @@ import 'package:flutter_project_2023/shared/enums.dart';
 import 'package:flutter_project_2023/repositories/shopping_item_model.dart';
 
 class ShoppingItemWidget extends StatefulWidget {
+  final String groupId;
   final ShoppingItem shoppingItem;
 
-  ShoppingItemWidget({Key? key, required this.shoppingItem}) : super(key: key);
+  ShoppingItemWidget(
+      {Key? key, required this.shoppingItem, required this.groupId})
+      : super(key: key);
 
   @override
   _ShoppingItemWidgetState createState() => _ShoppingItemWidgetState();
@@ -56,7 +59,7 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
       ),
       child: ListTile(
         title: Text(
-          widget.shoppingItem.name,
+          "${widget.shoppingItem.quantity}x ${widget.shoppingItem.name}",
           style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
         subtitle: Padding(
@@ -90,7 +93,7 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
                         onPressed: () {
                           // delete the item from the list
                           shoppingListRepository.deleteItem(
-                              widget.shoppingItem.uuid, widget.shoppingItem);
+                              widget.groupId, widget.shoppingItem.uuid);
 
                           Navigator.pop(context);
                         },
@@ -277,9 +280,10 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
         ),
         onTap: () {
           setState(() {
-            widget.shoppingItem.state = ShoppingItemState.values[
-                (widget.shoppingItem.state.index + 1) %
-                    ShoppingItemState.values.length];
+            var newItem = widget.shoppingItem.copy();
+            newItem.state = ShoppingItemState.values[
+                (newItem.state.index + 1) % ShoppingItemState.values.length];
+            shoppingListRepository.updateItem(widget.groupId, newItem);
           });
         },
       ),

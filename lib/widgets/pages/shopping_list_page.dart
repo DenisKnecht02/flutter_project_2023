@@ -153,7 +153,8 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
                   return SingleChildScrollView(
                     child: Column(
                       children: sortedItems
-                          .map((item) => ShoppingItemWidget(shoppingItem: item))
+                          .map((item) => ShoppingItemWidget(
+                              groupId: _selectedGroupId!, shoppingItem: item))
                           .toList(),
                     ),
                   );
