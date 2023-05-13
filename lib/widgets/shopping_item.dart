@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_project_2023/repositories/shopping_item_repository.dart';
+import 'package:flutter_project_2023/repositories/user_repository.dart';
 import 'package:flutter_project_2023/shared/enums.dart';
 import 'package:flutter_project_2023/repositories/shopping_item_model.dart';
 
@@ -20,12 +21,24 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
   final _meatballMenuIcon = const Icon(Icons.more_vert);
 
   ShoppingItemRepository shoppingListRepository = ShoppingItemRepository();
+  UserRepository userRepository = UserRepository();
 
   String productName = "";
   String productDescription = "";
   double productQuantity = 0;
 
   Unit? _selectedUnit;
+
+  String? userName;
+
+  @override
+  void initState() {
+    userRepository.getUserNameById(widget.shoppingItem.creatorId).then((value) {
+      setState(() {
+        userName = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +78,7 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
         subtitle: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
-            "${widget.shoppingItem.description ?? ''} (by: ${widget.shoppingItem.creatorId})",
+            "${widget.shoppingItem.description ?? ''} (by: ${userName ?? 'Anonymous'})",
             style: const TextStyle(fontSize: 14.0),
           ),
         ),

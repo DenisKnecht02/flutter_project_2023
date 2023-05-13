@@ -7,10 +7,7 @@ import 'package:flutter_project_2023/repositories/shopping_item_repository.dart'
 import 'package:flutter_project_2023/widgets/shopping_item.dart';
 import 'package:flutter_project_2023/widgets/shopping_list_add_item.dart';
 
-import '../../shared/enums.dart';
 import '../shopping_list_delete_item.dart';
-
-import '../../repositories/shopping_list_model.dart';
 
 class ShoppingListPage extends StatefulWidget {
   const ShoppingListPage({Key? key}) : super(key: key);
@@ -20,8 +17,9 @@ class ShoppingListPage extends StatefulWidget {
 }
 
 class _ShoppingListPageState extends State<ShoppingListPage> {
-  String? _selectedGroupId;
   ShoppingItemRepository shoppingListRepository = ShoppingItemRepository();
+
+  String? _selectedGroupId;
   GroupRepository groupRepository = GroupRepository();
   Groups userGroups = Groups([]);
 

@@ -21,7 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
         .getUserNameById(FirebaseAuth.instance.currentUser!.uid)
         .then((value) => setState(() {
               username = value;
-              _controller.text = username ?? '';
+              _controller.text = username ?? 'Anonymous';
             }));
   }
 

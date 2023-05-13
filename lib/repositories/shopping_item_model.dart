@@ -27,8 +27,6 @@ class ShoppingItem {
       required this.state});
 
   Map<String, dynamic> toFirestore() {
-    print(createdDate);
-    print(createdDate.toString());
     return {
       "uuid": uuid,
       "creatorId": creatorId,

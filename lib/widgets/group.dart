@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_project_2023/repositories/group_model.dart';
 import 'package:flutter_project_2023/repositories/group_repository.dart';
+import 'package:flutter_project_2023/repositories/user_repository.dart';
 import 'package:flutter_project_2023/shared/enums.dart';
 
 class GroupWidget extends StatefulWidget {
@@ -18,23 +19,27 @@ class _GroupWidgetState extends State<GroupWidget> {
   final _meatballMenuIcon = const Icon(Icons.more_vert);
 
   GroupRepository groupRepository = GroupRepository();
+  UserRepository userRepository = UserRepository();
 
   late String groupName;
   late String groupDescription;
   late List<String> userIds;
+  Map<String, String> userNames = {};
 
   @override
   void initState() {
     resetData();
   }
 
-  void resetData() {
-    setState(() {
-      groupName = widget.group.name;
-      groupDescription =
-          widget.group.description == null ? '' : widget.group.description!;
-      userIds = [...widget.group.userIds];
-    });
+  void resetData() async {
+    groupName = widget.group.name;
+    groupDescription =
+        widget.group.description == null ? '' : widget.group.description!;
+    userIds = [...widget.group.userIds]
+        .where((userId) => userId != widget.group.creatorId)
+        .toList();
+    userNames = await userRepository.getUserByIds(widget.group.userIds);
+    setState(() {});
   }
 
   void showEditScreen() {
@@ -80,7 +85,7 @@ class _GroupWidgetState extends State<GroupWidget> {
                 height: 20,
               ),
               Text(
-                "Created by: ${widget.group.creatorId}",
+                "Created by: ${userNames[widget.group.creatorId] ?? 'Anonymous'}",
                 style: const TextStyle(fontSize: 18.0),
               ),
               const SizedBox(
@@ -119,7 +124,8 @@ class _GroupWidgetState extends State<GroupWidget> {
                           margin: const EdgeInsets.only(bottom: 8),
                           key: Key(userIds[index]),
                           child: ListTile(
-                            title: Text(userIds[index]),
+                            title: Text(
+                                userNames[(userIds[index])] ?? 'Anonymous'),
                             trailing: const Icon(Icons.arrow_back),
                           )),
                     ),
@@ -139,11 +145,10 @@ class _GroupWidgetState extends State<GroupWidget> {
                           widget.group.id, groupName, groupDescription);
 
                       List<String> removedUserIds =
-                          widget.group.userIds.where((element) {
-                        return !userIds.contains(element);
+                          widget.group.userIds.where((userId) {
+                        return userId != widget.group.creatorId &&
+                            !userIds.contains(userId);
                       }).toList();
-
-                      print(removedUserIds);
 
                       for (var removedUserId in removedUserIds) {
                         groupRepository.removeUser(
@@ -151,7 +156,6 @@ class _GroupWidgetState extends State<GroupWidget> {
                       }
 
                       Navigator.pop(context);
-                      // TODO: refresh page
                     },
                     icon: const Icon(
                       Icons.save,
@@ -215,7 +219,7 @@ class _GroupWidgetState extends State<GroupWidget> {
                 ),
               ],
               Text(
-                "Created by: ${widget.group.creatorId}",
+                "Created by: ${userNames[widget.group.creatorId] ?? 'Anonymous'}",
                 style: const TextStyle(fontSize: 18.0),
               ),
               const SizedBox(
@@ -228,7 +232,8 @@ class _GroupWidgetState extends State<GroupWidget> {
                 itemBuilder: (context, index) {
                   return Card(
                     child: ListTile(
-                      title: Text(widget.group.userIds[index]),
+                      title: Text(userNames[widget.group.userIds[index]] ??
+                          'Anonymous'),
                     ),
                   );
                 },
