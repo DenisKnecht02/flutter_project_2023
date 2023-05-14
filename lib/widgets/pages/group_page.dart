@@ -197,7 +197,6 @@ class _GroupPageState extends State<GroupPage> {
                                         inviteCode = "";
                                         setState(() {});
                                       }
-                                      // TODO: refresh page
                                     }),
                                 const SizedBox(
                                   width: 10.0,

@@ -24,9 +24,7 @@ class GroupRepository {
     List<Group> groups = [];
     await db
         .collection(groupCollectionId)
-        .where(userIdsField, arrayContainsAny: [
-          currentUser?.uid
-        ]) //TODO: add creator id condition
+        .where(userIdsField, arrayContainsAny: [currentUser?.uid])
         .get()
         .then((querySnapshot) {
           for (var docSnapshot in querySnapshot.docs) {
@@ -62,15 +60,12 @@ class GroupRepository {
       userIdsField: FieldValue.arrayUnion([userId])
     });
   }
-  //TODO: Exception Handling
 
   Future<List<String>> getGroupNames() async {
     List<String> groupNames = [];
     await db
         .collection(groupCollectionId)
-        .where(userIdsField, arrayContainsAny: [
-          currentUser?.uid
-        ]) //TODO: add creator id condition
+        .where(userIdsField, arrayContainsAny: [currentUser?.uid])
         .get()
         .then((querySnapshot) {
           for (var docSnapshot in querySnapshot.docs) {
