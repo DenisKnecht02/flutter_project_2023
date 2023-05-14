@@ -74,7 +74,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -85,15 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static List<Widget> _pages = <Widget>[
     GroupPage(),
     ShoppingListPage(),
-    SettingsPage()
-    // ProfileScreen(
-    //   providers: [EmailAuthProvider()],
-    //   actions: [
-    //     SignedOutAction((context) {
-    //       Navigator.pushReplacementNamed(context, '/sign-in');
-    //     }),
-    //   ],
-    // ),
+    ProfilePage()
   ];
 
   @override
