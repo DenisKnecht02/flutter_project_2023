@@ -329,10 +329,13 @@ class _GroupWidgetState extends State<GroupWidget> {
             }
           },
           itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-            const PopupMenuItem(
-              value: 'delete',
-              child: Text('Delete'),
-            ),
+            if (widget.group.creatorId ==
+                FirebaseAuth.instance.currentUser!.uid) ...[
+              const PopupMenuItem(
+                value: 'delete',
+                child: Text('Delete'),
+              )
+            ],
             const PopupMenuItem(
               value: 'copy_invite_code',
               child: Text('Copy Invite Code'),
