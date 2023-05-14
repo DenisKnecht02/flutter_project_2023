@@ -36,14 +36,6 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
-              'Update Your Name',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 24.0),
             TextFormField(
               controller: _controller,
               decoration: InputDecoration(
@@ -67,7 +59,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 );
               },
               icon: Icon(Icons.save),
-              label: Text('Save Changes'),
+              label: Text('Save'),
             ),
             const SizedBox(height: 24.0),
             TextButton.icon(
@@ -89,6 +81,9 @@ class _SettingsPageState extends State<SettingsPage> {
               },
               icon: Icon(Icons.delete),
               label: Text('Delete Account'),
+              style: const ButtonStyle(
+                foregroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+              ),
             ),
           ],
         ),

@@ -5,7 +5,7 @@ import 'package:flutter_project_2023/widgets/pages/group_page.dart';
 import 'package:flutter_project_2023/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:flutter_project_2023/widgets/pages/settings_page.dart';
+import 'package:flutter_project_2023/widgets/pages/profile_page.dart';
 import 'package:flutter_project_2023/widgets/pages/shopping_list_page.dart';
 
 void main() async {
