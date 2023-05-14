@@ -128,8 +128,8 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Shopping List',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,
