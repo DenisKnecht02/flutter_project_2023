@@ -47,138 +47,152 @@ class _GroupWidgetState extends State<GroupWidget> {
       context: context,
       pageBuilder: (context, animation, secondaryAnimation) {
         return Scaffold(
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TextField(
-                controller: TextEditingController()..text = groupName,
-                decoration: const InputDecoration(
-                  hintText: 'Group Name',
+          body: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: TextEditingController()..text = groupName,
+                  decoration: const InputDecoration(
+                    hintText: 'Group Name',
+                  ),
+                  style: const TextStyle(
+                      fontSize: 18.0, fontWeight: FontWeight.bold),
+                  onChanged: (value) {
+                    setState(() {
+                      groupName = value;
+                    });
+                  },
                 ),
-                style: const TextStyle(
-                    fontSize: 18.0, fontWeight: FontWeight.bold),
-                onChanged: (value) {
-                  setState(() {
-                    groupName = value;
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextField(
-                controller: TextEditingController()..text = groupDescription,
-                decoration: const InputDecoration(
-                  hintText: 'Group Description',
+                const SizedBox(
+                  height: 20,
                 ),
-                style: const TextStyle(
-                  fontSize: 18.0,
+                TextField(
+                  controller: TextEditingController()..text = groupDescription,
+                  decoration: const InputDecoration(
+                    hintText: 'Group Description',
+                  ),
+                  style: const TextStyle(
+                    fontSize: 18.0,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      groupDescription = value;
+                    });
+                  },
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    groupDescription = value;
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Created by: ${userNames[widget.group.creatorId] ?? 'Anonymous'}",
-                style: const TextStyle(fontSize: 18.0),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ListView.builder(
-                key: Key(userIds.length.toString()),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                itemBuilder: (context, index) {
-                  return ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    child: Dismissible(
-                      key: Key(userIds[index]),
-                      direction: DismissDirection.endToStart,
-                      onDismissed: (direction) {
-                        setState(() {
-                          userIds.removeAt(index);
-                        });
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Created by: ${userNames[widget.group.creatorId] ?? 'Anonymous'}",
+                  style: const TextStyle(fontSize: 18.0),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ListView.builder(
+                  key: Key(userIds.length.toString()),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20)),
+                          child: Dismissible(
+                            key: Key(userIds[index]),
+                            direction: DismissDirection.endToStart,
+                            onDismissed: (direction) {
+                              setState(() {
+                                userIds.removeAt(index);
+                              });
+                            },
+                            background: Container(
+                              margin: EdgeInsets.zero,
+                              padding:
+                                  const EdgeInsetsDirectional.only(end: 20),
+                              alignment: Alignment.centerRight,
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                              ),
+                              child: const Icon(
+                                Icons.group_remove,
+                                color: Colors.white,
+                              ),
+                            ),
+                            child: Card(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.zero)),
+                                margin: EdgeInsets.zero,
+                                key: Key(userIds[index]),
+                                child: ListTile(
+                                  title: Text(userNames[(userIds[index])] ??
+                                      'Anonymous'),
+                                  trailing: const Icon(Icons.arrow_back),
+                                )),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        )
+                      ],
+                    );
+                  },
+                  itemCount: userIds.length,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        groupRepository.updateGroupInfo(
+                            widget.group.id, groupName, groupDescription);
+
+                        List<String> removedUserIds =
+                            widget.group.userIds.where((userId) {
+                          return userId != widget.group.creatorId &&
+                              !userIds.contains(userId);
+                        }).toList();
+
+                        for (var removedUserId in removedUserIds) {
+                          groupRepository.removeUser(
+                              widget.group.id, removedUserId);
+                        }
+
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                       },
-                      background: Container(
-                        padding: const EdgeInsetsDirectional.only(end: 20),
-                        alignment: Alignment.centerRight,
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                        ),
-                        child: const Icon(
-                          Icons.group_remove,
-                          color: Colors.white,
-                        ),
+                      icon: const Icon(
+                        Icons.save,
+                        size: 24.0,
                       ),
-                      child: Card(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.zero)),
-                          margin: const EdgeInsets.only(bottom: 8),
-                          key: Key(userIds[index]),
-                          child: ListTile(
-                            title: Text(
-                                userNames[(userIds[index])] ?? 'Anonymous'),
-                            trailing: const Icon(Icons.arrow_back),
-                          )),
+                      label: const Text('Save'),
                     ),
-                  );
-                },
-                itemCount: userIds.length,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      groupRepository.updateGroupInfo(
-                          widget.group.id, groupName, groupDescription);
-
-                      List<String> removedUserIds =
-                          widget.group.userIds.where((userId) {
-                        return userId != widget.group.creatorId &&
-                            !userIds.contains(userId);
-                      }).toList();
-
-                      for (var removedUserId in removedUserIds) {
-                        groupRepository.removeUser(
-                            widget.group.id, removedUserId);
-                      }
-
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.save,
-                      size: 24.0,
+                    const SizedBox(width: 16),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        resetData();
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(
+                        Icons.close,
+                        size: 24.0,
+                      ),
+                      label: const Text('Cancel'),
                     ),
-                    label: const Text('Save'),
-                  ),
-                  const SizedBox(width: 16),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      resetData();
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(
-                      Icons.close,
-                      size: 24.0,
-                    ),
-                    label: const Text('Cancel'),
-                  ),
-                ],
-              )
-            ],
+                  ],
+                )
+              ],
+            ),
           ),
         );
       },
