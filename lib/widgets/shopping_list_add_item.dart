@@ -17,7 +17,7 @@ class ShoppingListAddItem extends StatefulWidget {
 class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
   String productName = "";
   String productDescription = "";
-  double productQuantity = 0;
+  double productQuantity = 0.0;
 
   Unit? _selectedUnit;
   ShoppingItemRepository shoppingItemRepository = ShoppingItemRepository();
@@ -83,7 +83,8 @@ class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+\.?\d{0,2}')),
                   ],
                   onChanged: (value) {
                     productQuantity = double.parse(value);
