@@ -17,12 +17,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void initState() {
+    super.initState();
     userRepository
         .getUserNameById(FirebaseAuth.instance.currentUser!.uid)
-        .then((value) => setState(() {
-              username = value;
-              _controller.text = username ?? 'Anonymous';
-            }));
+        .then((value) {
+      setState(() {
+        username = value;
+        _controller.text = username ?? 'Anonymous';
+      });
+    });
   }
 
   @override
@@ -31,40 +34,65 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: Center(
+      body: Container(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
+            Text(
+              'Update Your Name',
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 24.0),
+            TextFormField(
               controller: _controller,
-              decoration: const InputDecoration(hintText: "Name"),
+              decoration: InputDecoration(
+                labelText: 'Name',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.person),
+              ),
               onChanged: (value) {
-                username = value;
+                setState(() {
+                  username = value;
+                });
               },
             ),
-            IconButton(
-                onPressed: () {
-                  if (username == null) return;
-                  userRepository.changeDisplayName(
-                      FirebaseAuth.instance.currentUser!.uid, username!);
-                },
-                icon: const Icon(Icons.done)),
+            const SizedBox(height: 32.0),
+            ElevatedButton.icon(
+              onPressed: () {
+                if (username == null) return;
+                userRepository.changeDisplayName(
+                  FirebaseAuth.instance.currentUser!.uid,
+                  username!,
+                );
+              },
+              icon: Icon(Icons.save),
+              label: Text('Save Changes'),
+            ),
+            const SizedBox(height: 24.0),
             TextButton.icon(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                  Navigator.pushReplacementNamed(context, '/sign-in');
-                },
-                icon: const Icon(Icons.logout),
-                label: const Text("Sign Out")),
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.pushReplacementNamed(context, '/sign-in');
+              },
+              icon: Icon(Icons.logout),
+              label: Text('Sign Out'),
+            ),
+            const SizedBox(height: 8.0),
             TextButton.icon(
-                onPressed: () {
-                  // TODO: error handling
-                  userRepository
-                      .deleteUser(FirebaseAuth.instance.currentUser!.uid);
-                  FirebaseAuth.instance.currentUser!.delete();
-                  Navigator.pushReplacementNamed(context, '/sign-in');
-                },
-                icon: const Icon(Icons.delete),
-                label: const Text("Delete Account"))
+              onPressed: () {
+                // TODO: error handling
+                userRepository
+                    .deleteUser(FirebaseAuth.instance.currentUser!.uid);
+                FirebaseAuth.instance.currentUser!.delete();
+                Navigator.pushReplacementNamed(context, '/sign-in');
+              },
+              icon: Icon(Icons.delete),
+              label: Text('Delete Account'),
+            ),
           ],
         ),
       ),
