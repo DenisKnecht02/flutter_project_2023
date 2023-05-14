@@ -72,7 +72,7 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
       ),
       child: ListTile(
         title: Text(
-          "${widget.shoppingItem.quantity}x ${widget.shoppingItem.name}",
+          "${widget.shoppingItem.quantity!.toString().split(".")[1] == "0" ? widget.shoppingItem.quantity!.toInt().toString() : widget.shoppingItem.quantity!}x ${widget.shoppingItem.name}",
           style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
         subtitle: Padding(
