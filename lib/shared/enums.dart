@@ -1,17 +1,17 @@
 enum Unit {
-  Can,
-  Bucket,
   Bag,
-  Bottle,
-  Jar,
-  Gram,
-  Kilogram,
-  Box,
+  Band,
   Basket,
+  Bottle,
+  Box,
+  Bucket,
+  Can,
+  Gram,
+  Jar,
+  Kilogram,
   Liter,
   Net,
   Package,
-  Band,
   Piece
 }
 
