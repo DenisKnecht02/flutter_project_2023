@@ -11,7 +11,7 @@ class UserRepository {
         .add({userIdField: user.uid, userNameField: user.displayName});
   }
 
-  void changeDisplayName(String userId, String userName) async {
+  Future<void> changeDisplayName(String userId, String userName) async {
     var doc = await db
         .collection(userCollectionId)
         .where(userIdField, isEqualTo: userId)
