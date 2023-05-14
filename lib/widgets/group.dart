@@ -331,8 +331,27 @@ class _GroupWidgetState extends State<GroupWidget> {
           onSelected: (value) async {
             switch (value) {
               case 'delete':
-                groupRepository.deleteGroup(widget.group.id);
-                // TODO: refresh page
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Delete Group'),
+                    content: const Text(
+                        'Are you sure you want to delete this group? This will delete the group for all members.'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          groupRepository.deleteGroup(widget.group.id);
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Delete'),
+                      ),
+                    ],
+                  ),
+                );
                 break;
               case 'copy_invite_code':
                 await Clipboard.setData(ClipboardData(text: widget.group.id));
