@@ -21,11 +21,19 @@ class ShoppingListEditItem extends StatefulWidget {
 
 class _ShoppingListEditItemState extends State<ShoppingListEditItem> {
   String productName = "";
-  String productDescription = "";
-  double productQuantity = 0.0;
+  String? productDescription;
+  double productQuantity = 0;
 
   Unit? _selectedUnit;
   ShoppingItemRepository shoppingItemRepository = ShoppingItemRepository();
+
+  @override
+  void initState() {
+    _selectedUnit = widget.item.unit;
+    productName = widget.item.name;
+    productDescription = widget.item.description;
+    productQuantity = widget.item.quantity ?? 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -169,22 +177,23 @@ class _ShoppingListEditItemState extends State<ShoppingListEditItem> {
         TextButton(
           child: const Text("OK"),
           onPressed: () {
+            if (_selectedUnit == null ||
+                productName.isEmpty ||
+                productQuantity == 0) {
+              return;
+            }
+
             shoppingItemRepository.updateItem(
                 widget.groupId,
                 ShoppingItem(
                     uuid: widget.item.uuid,
                     creatorId: widget.item.creatorId,
                     createdDate: widget.item.createdDate,
-                    name:
-                        productName.isNotEmpty ? productName : widget.item.name,
-                    description: productDescription.isNotEmpty
-                        ? productDescription
-                        : widget.item.description,
-                    unit: _selectedUnit ?? widget.item.unit,
+                    name: productName,
+                    description: productDescription,
+                    unit: _selectedUnit!,
                     state: widget.item.state,
-                    quantity: productQuantity == 0
-                        ? widget.item.quantity
-                        : productQuantity));
+                    quantity: productQuantity));
             Navigator.of(context).pop();
           },
         ),

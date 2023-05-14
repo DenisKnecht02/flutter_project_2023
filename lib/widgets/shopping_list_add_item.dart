@@ -16,8 +16,8 @@ class ShoppingListAddItem extends StatefulWidget {
 
 class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
   String productName = "";
-  String productDescription = "";
-  double productQuantity = 0.0;
+  String? productDescription;
+  double productQuantity = 0;
 
   Unit? _selectedUnit;
   ShoppingItemRepository shoppingItemRepository = ShoppingItemRepository();
@@ -161,8 +161,9 @@ class _ShoppingListAddItemState extends State<ShoppingListAddItem> {
         TextButton(
           child: const Text("OK"),
           onPressed: () {
-            if (_selectedUnit == null) {
-              // TODO: Error Handling
+            if (_selectedUnit == null ||
+                productName.isEmpty ||
+                productQuantity == 0) {
               return;
             }
 
