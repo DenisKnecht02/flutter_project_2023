@@ -42,51 +42,53 @@ class _ShoppingListPageState extends State<ShoppingListPage> {
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: AppBar(
             centerTitle: false,
-            title: DropdownButton<String>(
-              value: _selectedGroupId,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedGroupId = newValue;
-                });
-              },
-              items: userGroups.groups
-                  .map<DropdownMenuItem<String>>((Group value) {
-                return DropdownMenuItem<String>(
-                  value: value.id,
-                  child: Text(
-                    value.name,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal,
+            title: userGroups.groups.isEmpty
+                ? null
+                : DropdownButton<String>(
+                    value: _selectedGroupId,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedGroupId = newValue;
+                      });
+                    },
+                    items: userGroups.groups
+                        .map<DropdownMenuItem<String>>((Group value) {
+                      return DropdownMenuItem<String>(
+                        value: value.id,
+                        child: Text(
+                          value.name,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    style: const TextStyle(color: Colors.black),
+                    hint: const Text(
+                      'Select a Group',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                      ),
                     ),
+                    underline: Container(
+                      height: 2,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                    ),
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: Colors.black,
+                    ),
+                    iconSize: 24,
+                    iconEnabledColor: Colors.black,
+                    dropdownColor: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    elevation: 8,
                   ),
-                );
-              }).toList(),
-              style: const TextStyle(color: Colors.black),
-              hint: const Text(
-                'Select a Group',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              underline: Container(
-                height: 2,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-              ),
-              icon: const Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: Colors.black,
-              ),
-              iconSize: 24,
-              iconEnabledColor: Colors.black,
-              dropdownColor: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              elevation: 8,
-            ),
             backgroundColor: Colors.white,
           ),
         ),
