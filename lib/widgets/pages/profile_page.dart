@@ -116,7 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               obscureText: true,
                                               enableSuggestions: false,
                                               autocorrect: false,
-                                              decoration: InputDecoration(
+                                              decoration: const InputDecoration(
                                                 labelText: 'Your password',
                                                 border: OutlineInputBorder(
                                                   borderSide: BorderSide(
@@ -144,40 +144,37 @@ class _ProfilePageState extends State<ProfilePage> {
                                             child: const Text('Cancel'),
                                           ),
                                           TextButton(
-                                            onPressed: () {
-                                              FirebaseAuth.instance
+                                            onPressed: () async {
+                                              await FirebaseAuth.instance
                                                   .signInWithEmailAndPassword(
                                                       email: user!.email!,
-                                                      password: password);
-                                              FirebaseAuth.instance.currentUser!
-                                                  .delete()
-                                                  .then((_) =>
-                                                      completeDeletingUser())
-                                                  .onError(
-                                                      (error, stackTrace) => {
-                                                            Navigator.pop(
-                                                                context),
-                                                            showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder: (BuildContext
-                                                                        context) =>
-                                                                    AlertDialog(
-                                                                        title: const Text(
-                                                                            "Failed"),
-                                                                        content:
-                                                                            const Text(
-                                                                                'Sorry, deleting your account was not successful. Please try again and check if your password was correct.'),
-                                                                        actions: <
-                                                                            Widget>[
-                                                                          TextButton(
-                                                                            onPressed: () =>
-                                                                                Navigator.pop(context),
-                                                                            child:
-                                                                                const Text('Ok'),
-                                                                          ),
-                                                                        ]))
-                                                          });
+                                                      password: password)
+                                                  .then((_) => FirebaseAuth
+                                                      .instance.currentUser!
+                                                      .delete()
+                                                      .then((_) =>
+                                                          completeDeletingUser())
+                                                      .onError(
+                                                          (error, stackTrace) =>
+                                                              {
+                                                                Navigator.pop(
+                                                                    context),
+                                                                showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder: (BuildContext
+                                                                            context) =>
+                                                                        AlertDialog(
+                                                                            title:
+                                                                                const Text("Failed"),
+                                                                            content: const Text('Sorry, deleting your account was not successful. Please try again and check if your password was correct.'),
+                                                                            actions: <Widget>[
+                                                                              TextButton(
+                                                                                onPressed: () => Navigator.pop(context),
+                                                                                child: const Text('Ok'),
+                                                                              ),
+                                                                            ]))
+                                                              }));
                                             },
                                             child: const Text('Delete'),
                                           ),
