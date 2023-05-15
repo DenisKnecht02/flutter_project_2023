@@ -73,7 +73,7 @@ class _ShoppingItemWidgetState extends State<ShoppingItemWidget> {
       ),
       child: ListTile(
         title: Text(
-          "${widget.shoppingItem.quantity!.toString().split(".").length == 1 ? widget.shoppingItem.quantity!.toInt().toString() : widget.shoppingItem.quantity!} ${widget.shoppingItem.unit.name} ${widget.shoppingItem.name}",
+          "${widget.shoppingItem.quantity!.roundToDouble() == widget.shoppingItem.quantity! ? widget.shoppingItem.quantity!.toInt().toString() : widget.shoppingItem.quantity!} ${widget.shoppingItem.unit.name} ${widget.shoppingItem.name}",
           style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
         subtitle: Padding(
